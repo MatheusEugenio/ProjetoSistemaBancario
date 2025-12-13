@@ -1,7 +1,7 @@
-package Conta.Personas_Da_Conta;
+package Entitite.Conta.Personas_Da_Conta;
 
-import Cliente.Cliente;
-import Conta.Conta;
+import Entitite.Cliente.Cliente;
+import Entitite.Conta.Conta;
 
 public class ContaPoupanca extends Conta implements Tributavel {
 

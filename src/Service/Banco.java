@@ -9,11 +9,6 @@ public class Banco {
         this.codigo = codigo;
     }
 
-    public Banco(String nome_do_Banco){
-        this.nome_do_Banco = nome_do_Banco;
-        this.codigo = "";
-    }
-
     public void adicionarCliente(){
 
     }

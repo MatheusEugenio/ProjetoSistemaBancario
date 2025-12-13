@@ -1,6 +1,6 @@
-package Cliente.TiposDeCliente;
+package Entitite.Cliente.TiposDeCliente;
 
-import Cliente.Cliente;
+import Entitite.Cliente.Cliente;
 
 public class ClientePessoaFisica extends Cliente {
 

@@ -1,10 +1,16 @@
-package Cliente;
+package Entitite.Cliente;
+
+import Entitite.Conta.Conta;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Cliente {
 
     private String nome;
     private long cpf;
     private String endereco;
+    private Set<Conta> contas = new HashSet<>();
 
     public Cliente(String nome, long cpf, String endereco) {
         this.nome = nome;
@@ -12,14 +18,8 @@ public abstract class Cliente {
         this.endereco = endereco;
     }
 
-    public String getNome() {
-        return nome;
-    }
-    public long getCpf() {
-        return cpf;
-    }
-    public String getEndereco() {
-        return endereco;
+    public void vincularConta(Conta conta) {
+        if (conta != null && conta.getTitular() != null){this.contas.add(conta);}
     }
 
     public void atualizarDados(String novo_nome, String novo_endereco) {
@@ -27,10 +27,14 @@ public abstract class Cliente {
         this.endereco = novo_endereco;
     }
 
-    //Talvez com a implementação do toString() esse metodo não seja mais útil, possa ser que seja excluído
+    // ESSE METODO RETORNA TODAS AS CONTAS LIGADAS A ESSE CLIENTE
     public String consultarContas() {
-        return "Nome do titular: " + nome + ", Cpf do titular: " + cpf + ", Endereco: " + endereco + ".";
+        return "";//é preciso iterar sobre uma lista de clientes
     }
+
+    public String getNome() {return nome;}
+    public long getCpf() {return cpf;}
+    public String getEndereco() {return endereco;}
 
     @Override
     public String toString() {
