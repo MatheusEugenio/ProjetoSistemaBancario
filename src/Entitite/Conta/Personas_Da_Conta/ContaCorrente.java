@@ -7,8 +7,8 @@ public class ContaCorrente extends Conta {
 
     private Double limiteChequeEspecial;
 
-    public ContaCorrente(Integer numero, Integer agencia, Double saldo, Cliente titular, double limite) {
-        super(numero, agencia, saldo, titular);
+    public ContaCorrente(Integer numero, Integer agencia, Cliente titular, double limite) {
+        super(numero, agencia, titular);
         this.limiteChequeEspecial = limite;
     }
 

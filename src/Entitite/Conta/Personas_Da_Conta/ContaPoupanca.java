@@ -7,8 +7,8 @@ public class ContaPoupanca extends Conta implements Tributavel {
 
     private Double taxaRendimento;
 
-    public ContaPoupanca(Integer numero, Integer agencia, Double saldo, Cliente titular, double taxa) {
-        super(numero, agencia, saldo, titular);
+    public ContaPoupanca(Integer numero, Integer agencia, Cliente titular, double taxa) {
+        super(numero, agencia, titular);
         this.taxaRendimento = taxa;
     }
 
