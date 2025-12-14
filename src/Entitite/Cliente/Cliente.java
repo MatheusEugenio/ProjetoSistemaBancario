@@ -8,13 +8,11 @@ import java.util.Set;
 public abstract class Cliente {
 
     private String nome;
-    private long cpf;
     private String endereco;
     private Set<Conta> contas = new HashSet<>();
 
-    public Cliente(String nome, long cpf, String endereco) {
+    public Cliente(String nome, String endereco) {
         this.nome = nome;
-        this.cpf = cpf;
         this.endereco = endereco;
     }
 
@@ -33,11 +31,10 @@ public abstract class Cliente {
     }
 
     public String getNome() {return nome;}
-    public long getCpf() {return cpf;}
     public String getEndereco() {return endereco;}
 
     @Override
     public String toString() {
-        return "Nome do cliente =" + nome + ", cpf =" + cpf + ", endereco =" + endereco;
+        return "Nome do cliente =" + nome + ", endereco =" + endereco;
     }
 }

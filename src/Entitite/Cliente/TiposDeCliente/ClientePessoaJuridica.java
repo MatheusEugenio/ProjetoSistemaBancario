@@ -7,8 +7,8 @@ public class ClientePessoaJuridica extends Cliente {
     private String cnpj;
     private String razaoSocial;
 
-    public ClientePessoaJuridica(String nome, long cpf, String endereco, String cnpj, String razaoSocial) {
-        super(nome, cpf, endereco);
+    public ClientePessoaJuridica(String nome, String endereco, String cnpj, String razaoSocial) {
+        super(nome, endereco);
         this.cnpj = cnpj;
         this.razaoSocial = razaoSocial;
     }

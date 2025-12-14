@@ -4,13 +4,16 @@ import Entitite.Cliente.Cliente;
 
 public class ClientePessoaFisica extends Cliente {
 
+    private long cpf;
     private String data_de_nascimento;
 
     public ClientePessoaFisica(String nome, long cpf, String endereco, String data_de_nascimento) {
-        super(nome, cpf, endereco);
+        super(nome, endereco);
+        this.cpf = cpf;
         this.data_de_nascimento = data_de_nascimento;
     }
 
+    public long getCpf() {return cpf;}
     public String getData_de_nascimento() {return data_de_nascimento;}
 
     @Override
