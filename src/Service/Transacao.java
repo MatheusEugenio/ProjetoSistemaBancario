@@ -15,8 +15,9 @@ public class Transacao {
     }
 
     public void registrar(){
-        data = LocalDate.now();
-
+        System.out.println("Horario da Transacao: " + data);
+        System.out.println("Tipo de transacao: " + tipo_de_transacao);
+        System.out.printf("Valor da transacao: " + valTransacao);
     }
 
     public LocalDate getData() {return data;}
