@@ -15,7 +15,7 @@ public class Transacao {
     }
 
     public void registrar(){
-        System.out.println("Horario da Transacao: " + data);
+        System.out.println("Data da Transacao: " + data);
         System.out.println("Tipo de transacao: " + tipo_de_transacao);
         System.out.printf("Valor da transacao: " + valTransacao);
     }
