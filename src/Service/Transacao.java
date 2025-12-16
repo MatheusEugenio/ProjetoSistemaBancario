@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class Transacao {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final String caminhoDoRegistro = "Service/ResgistroDeTransacoes.txt";
+    private static final String caminhoDoRegistro = "dados/RegistroDeTransacoes.txt";
     private LocalDate dataTransacao;
     private String tipo_de_transacao;
     private Double valTransacao;
