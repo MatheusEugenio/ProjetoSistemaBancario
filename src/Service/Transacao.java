@@ -15,7 +15,7 @@ public class Transacao {
     }
 
     public void registrar(){
-
+        valTransacao += 100;
     }
 
     public LocalDate getData() {return data;}
