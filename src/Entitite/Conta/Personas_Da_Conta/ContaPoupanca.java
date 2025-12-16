@@ -21,19 +21,10 @@ public class ContaPoupanca extends Conta implements Tributavel {
         return 0;
     }
 
-    @Override
-    public void depositar(double val_deposito) {
-
-    }
 
     @Override
     public void sacar(double val_saque) {
 
-    }
-
-    @Override
-    public double verSaldo() {
-        return super.saldo;
     }
 
     @Override

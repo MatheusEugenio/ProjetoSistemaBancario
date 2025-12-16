@@ -17,10 +17,14 @@ public abstract class Conta{
         this.titular.vincularConta(this);
     }
 
-    public abstract void depositar(double val_deposito);
+    public void depositar(double val_deposito) {
+        saldo += val_deposito;
+    }
     public abstract void sacar(double val_saque);
     public abstract void transferir(Conta conta, double valor_transferencia);
-    public abstract double verSaldo();
+    public void verSaldo() {
+        System.out.println("Valor do saldo: " + saldo);
+    }
 
     public Integer getNumero() {return numero;}
     public Integer getAgencia() {return agencia;}
