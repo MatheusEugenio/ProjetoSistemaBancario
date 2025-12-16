@@ -46,9 +46,7 @@ public class Transacao {
                         "| Tipo de transacao: "+ tipo_de_transacao +
                         "| Valor da transacao: "+ valTransacao);
             writer.newLine();
-
-            writer.write("---------------------------------------------");
-            writer.newLine();
+            
             writer.flush();
         }catch (IOException e) {
             throw new IOException("FALHA AO REGISTRAR AS TRANSAÇÕES NO BANCO!");
