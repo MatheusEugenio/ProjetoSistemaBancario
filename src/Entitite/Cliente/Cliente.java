@@ -8,9 +8,9 @@ import java.util.Set;
 
 public abstract class Cliente {
 
-    private String nome;
-    private String endereco;
-    private LocalDate dataDeNascimento;
+    protected String nome;
+    protected String endereco;
+    protected LocalDate dataDeNascimento;
     private Set<Conta> contas = new HashSet<>();
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
