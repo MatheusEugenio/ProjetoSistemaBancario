@@ -24,7 +24,7 @@ public abstract class Cliente {
         if (conta != null && conta.getTitular() != null){this.contas.add(conta);}
     }
 
-    public void atualizarDados(String novo_nome, String novo_endereco) {
+    public void atualizarDados(String novo_nome, String novo_endereco) {// falta a integração da interface gráfica
         this.nome = novo_nome;
         this.endereco = novo_endereco;
     }

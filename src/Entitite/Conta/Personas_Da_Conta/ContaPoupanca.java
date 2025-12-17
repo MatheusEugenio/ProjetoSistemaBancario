@@ -2,6 +2,7 @@ package Entitite.Conta.Personas_Da_Conta;
 
 import Entitite.Cliente.Cliente;
 import Entitite.Conta.Conta;
+import Entitite.InsufficientFundsException;
 import Entitite.InvalidValueException;
 
 
@@ -45,13 +46,13 @@ public class ContaPoupanca extends Conta implements Tributavel {
     }
 
     @Override
-    public double verSaldo() {
-        return super.saldo;
-    }
-
-    @Override
-    public void transferir(Conta conta, double valor_transferencia) {
-
+    public void transferir(Conta conta, double valor_transferencia) throws InsufficientFundsException {
+        if (valor_transferencia > 0 && this.getSaldo() >= valor_transferencia) {
+            this.setSaldo(this.getSaldo() - valor_transferencia);
+            conta.setSaldo(conta.getSaldo() + valor_transferencia);
+        }else {
+            throw new InsufficientFundsException("FALHA NA TRANSFERÊNCIA, SALDO INSUFICENTE!");
+        }
     }
 
 }
