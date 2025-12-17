@@ -29,4 +29,5 @@ public abstract class Conta{
     public Double getSaldo() {return saldo;}
     public Cliente getTitular() {return titular;}
     public void setSaldo(Double saldo) {this.saldo = saldo;}
+
 }

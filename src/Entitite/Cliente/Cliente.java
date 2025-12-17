@@ -30,8 +30,12 @@ public abstract class Cliente {
     }
 
     // ESSE METODO RETORNA TODAS AS CONTAS LIGADAS A ESSE CLIENTE
-    public String consultarContas() {
-        return "";//é preciso iterar sobre uma lista de clientes
+    public void consultarContas() {// esse metodo deve ser revisado quando a Interface Gráfica for implementada
+        System.out.println("--- SUAS CONTAS ---\n");
+        for (Conta conta : contas) {
+            System.out.println(conta.toString());
+        }
+        System.out.println("\n-------------------");
     }
 
     public String getNome() {return nome;}
@@ -39,9 +43,8 @@ public abstract class Cliente {
 
     @Override
     public String toString() {
-        return "Nome do cliente -" + nome +
-                ", endereco -" + endereco +
-                ", dataDeNascimento -" + dataDeNascimento +
-                ", contas -" + contas;
+        return "Nome do cliente - " + nome +
+                ", endereco - " + endereco +
+                ", dataDeNascimento - " + dataDeNascimento;
     }
 }
