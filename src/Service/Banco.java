@@ -22,20 +22,20 @@ public class Banco {
         this.clientesDoBanco = new ArrayList<Cliente>();
     }
 
-    public boolean adicionarCliente(Scanner sc) throws InvalidValueException, InputMismatchException{
-        String cpf = null;
-        String cnpj = null;
-        String dataNascimento = null;
-        String nome = null;
-        String nomeEmpresa = null;
+    public boolean adicionarCliente(Scanner sc) throws InputMismatchException{
+        String cpf;
+        String cnpj;
+        String dataNascimento;
+        String nome;
+        String nomeEmpresa;
         int cep = 0;
-        String cidade = null;
-        String rua = null;
-        String bairro = null;
-        String numeroDaCasa = null;
-        String complemento = null;
-        String dataDeNascimento = null;
-        Endereco enderecoDeCriacao = null;
+        String cidade;
+        String rua;
+        String bairro;
+        String numeroDaCasa;
+        String complemento;
+        String dataDeNascimento;
+        Endereco enderecoDeCriacao;
         boolean verificacao = false;
 
         try {
