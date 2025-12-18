@@ -9,12 +9,12 @@ import java.util.Set;
 public abstract class Cliente {
 
     protected String nome;
-    protected String endereco;
+    protected Endereco endereco;
     protected LocalDate dataDeNascimento;
     private Set<Conta> contas = new HashSet<>();
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public Cliente(String nome, String endereco, String dataNascimento) {
+    public Cliente(String nome, Endereco endereco, String dataNascimento) {
         this.nome = nome;
         this.endereco = endereco;
         this.dataDeNascimento = LocalDate.parse(dataNascimento, formatter);
@@ -22,9 +22,10 @@ public abstract class Cliente {
 
     public void vincularConta(Conta conta) {
         if (conta != null && conta.getTitular() != null){this.contas.add(conta);}
+        else{throw new RuntimeException("Vinculação de conta inválida!");}
     }
 
-    public void atualizarDados(String novo_nome, String novo_endereco) {// falta a integração da interface gráfica
+    public void atualizarDados(String novo_nome, Endereco novo_endereco) {// falta a integração da interface gráfica
         this.nome = novo_nome;
         this.endereco = novo_endereco;
     }
@@ -39,12 +40,20 @@ public abstract class Cliente {
     }
 
     public String getNome() {return nome;}
-    public String getEndereco() {return endereco;}
+    public String getEndereco() {return endereco.toString();}
+    public LocalDate getDataDeNascimento() {return dataDeNascimento;}
 
     @Override
     public String toString() {
+        String enderecoImpressao;
+        if (!endereco.getComplemento().equals("nenhum")){
+            enderecoImpressao = endereco.toString() + " | Complemento: "+endereco.getComplemento();
+        } else {
+            enderecoImpressao = endereco.toString();
+        }
+
         return "Nome do cliente - " + nome +
-                ", endereco - " + endereco +
-                ", dataDeNascimento - " + dataDeNascimento;
+                ", DataDeNascimento - " + dataDeNascimento +
+                ", Endereço - " + enderecoImpressao ;
     }
 }
