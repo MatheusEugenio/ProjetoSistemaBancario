@@ -15,6 +15,11 @@ public class ContaPoupanca extends Conta implements Tributavel {
         this.taxaRendimento = taxa;
     }
 
+    public ContaPoupanca(Integer numero, Integer agencia, Cliente titular) {
+        super(numero, agencia, titular);
+        this.taxaRendimento = 1.5;
+    }
+
     public void calcularRendimento(){
         if (this.taxaRendimento != null && this.saldo > 0) {
             double valorDoRendimento = this.saldo * this.taxaRendimento;
