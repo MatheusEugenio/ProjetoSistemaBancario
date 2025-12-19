@@ -1,4 +1,4 @@
-package Entitite;
+package entity;
 
 public class InsufficientFundsException extends Exception {
     public InsufficientFundsException(String message) {

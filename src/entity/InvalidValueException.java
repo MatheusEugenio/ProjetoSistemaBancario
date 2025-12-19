@@ -1,4 +1,4 @@
-package Entitite;
+package entity;
 
 public class InvalidValueException extends Exception {
     public InvalidValueException(String message) {

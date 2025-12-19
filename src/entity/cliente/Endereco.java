@@ -1,4 +1,4 @@
-package Entitite.Cliente;
+package entity.cliente;
 
 public class Endereco {
     private String rua;

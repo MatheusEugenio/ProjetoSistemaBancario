@@ -1,7 +1,7 @@
-package Entitite.Cliente.TiposDeCliente;
+package entity.cliente.tiposdecliente;
 
-import Entitite.Cliente.Cliente;
-import Entitite.Cliente.Endereco;
+import entity.cliente.Cliente;
+import entity.cliente.Endereco;
 
 public class ClientePessoaJuridica extends Cliente {
 

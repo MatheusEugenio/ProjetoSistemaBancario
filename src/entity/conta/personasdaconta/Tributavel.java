@@ -1,4 +1,4 @@
-package Entitite.Conta.Personas_Da_Conta;
+package entity.conta.personasdaconta;
 
 public interface Tributavel {
     double calcularImposto();

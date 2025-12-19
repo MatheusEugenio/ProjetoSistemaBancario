@@ -1,9 +1,9 @@
-package Entitite.Conta.Personas_Da_Conta;
+package entity.conta.personasdaconta;
 
-import Entitite.Cliente.Cliente;
-import Entitite.Conta.Conta;
-import Entitite.InsufficientFundsException;
-import Entitite.InvalidValueException;
+import entity.cliente.Cliente;
+import entity.conta.Conta;
+import entity.InsufficientFundsException;
+import entity.InvalidValueException;
 
 
 public class ContaPoupanca extends Conta implements Tributavel {

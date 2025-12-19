@@ -1,6 +1,6 @@
-package Entitite.Cliente;
+package entity.cliente;
 
-import Entitite.Conta.Conta;
+import entity.conta.Conta;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;

@@ -1,21 +1,21 @@
-package Service;
+package service;
 
-import Entitite.Cliente.Cliente;
-import Entitite.Cliente.Endereco;
-import Entitite.Cliente.TiposDeCliente.ClientePessoaFisica;
-import Entitite.Cliente.TiposDeCliente.ClientePessoaJuridica;
+import entity.cliente.Cliente;
+import entity.cliente.Endereco;
+import entity.cliente.tiposdecliente.ClientePessoaFisica;
+import entity.cliente.tiposdecliente.ClientePessoaJuridica;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Banco {
-    private String nome_do_Banco;
+    private String nomeDoBanco;
     private String codigo;
     private List<Cliente> clientesDoBanco;
 
     public Banco(String nomeBanco, String codigo){
-        this.nome_do_Banco = nomeBanco;
+        this.nomeDoBanco = nomeBanco;
         this.codigo = codigo;
         this.clientesDoBanco = new ArrayList<>();
     }
@@ -90,6 +90,6 @@ public class Banco {
         return new Endereco(rua, cep,numeroDaCasa,complemento,bairro,cidade);
     }
 
-    public String getNomeDoBanco() {return nome_do_Banco;}
+    public String getNomeDoBanco() {return nomeDoBanco;}
     public String getCodigo() {return codigo;}
 }

@@ -1,8 +1,8 @@
-package Entitite.Conta;
+package entity.conta;
 
-import Entitite.Cliente.Cliente;
-import Entitite.InsufficientFundsException;
-import Entitite.InvalidValueException;
+import entity.cliente.Cliente;
+import entity.InsufficientFundsException;
+import entity.InvalidValueException;
 
 public abstract class Conta{
 
