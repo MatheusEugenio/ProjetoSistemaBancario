@@ -66,7 +66,7 @@ public class Transacao {
             }
 
             writer.write("Data da Transação: " + dataTransacao +
-                    "| Tipo de transacao: "+ tipoDeTransacao +
+                    "| Tipo de transacao: "+ tipoDeTransacao + //se foi saque ou deposito ou transferencia
                     "| Valor da transacao: "+ valTransacao);
             writer.newLine();
 

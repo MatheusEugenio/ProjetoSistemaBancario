@@ -1,18 +1,15 @@
 package entity.cliente;
 
 public class Endereco {
-    private String rua;
-    private long cep;
-    private int numeroDaCasa;
-    private String complemento;
-    private String bairro;
-    private String cidade;
 
-    public Endereco(String rua, long cep, int numeroDaCasa, String complemento, String bairro, String cidade) {
+    private String rua, cep, complemento, bairro, cidade;
+    private int numeroDaCasa;
+
+    public Endereco(String rua, String cep, int numeroDaCasa, String complemento, String bairro, String cidade) {
         this.rua = rua;
         this.cep = cep;
         this.numeroDaCasa = numeroDaCasa;
-        if (complemento.isBlank() || complemento == null) {this.complemento = "nenhum";
+        if (complemento.isBlank() || complemento == null) {this.complemento = "Nenhum";
         }else {this.complemento = complemento;}
         this.bairro = bairro;
         this.cidade = cidade;
@@ -27,7 +24,7 @@ public class Endereco {
     }
 
     public String getRua() {return rua;}
-    public long getCep() {return cep;}
+    public String getCep() {return cep;}
     public int getNumeroDaCasa() {return numeroDaCasa;}
     public String getComplemento() {return complemento;}
     public String getBairro() {return bairro;}
