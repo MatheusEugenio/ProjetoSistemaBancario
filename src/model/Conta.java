@@ -25,38 +25,53 @@ public abstract class Conta{
         this.historico = new ArrayList<>();
     }
 
-    public void depositar(double val_deposito) throws InvalidValueException {//
+    public void depositar(double val_deposito) throws InvalidValueException, IOException {//
         if (val_deposito > 0) {
             saldo += val_deposito;
-            this.historico.add(new Transacao("Deposito", val_deposito));
+            Transacao t = new Transacao("Deposito", val_deposito);
+            this.historico.add(t);
+            t.registrar();
         } else {
             throw new InvalidValueException("Valor de depósito inválido!");//revisar
         }
     }
 
-    public void sacar(double val_saque) throws InvalidValueException{ //
+    public void sacar(double val_saque) throws InvalidValueException, IOException { //
         if (val_saque > 0 && val_saque <= saldo && saldo >= 0) { //Daniel
             saldo -= val_saque;
-            historico.add(new Transacao("Saque", val_saque));
+            Transacao t = new Transacao("Saque", val_saque);
+            historico.add(t);
+            t.registrar();
         } else {
             throw new InvalidValueException("Saldo insuficiente para saque!");//revisar
         }
     }
 
-    public void transferir(Conta conta, double valor_transferencia) throws InsufficientFundsException, InvalidValueException {
+    public void transferir(Conta conta, double valor_transferencia) throws InsufficientFundsException, InvalidValueException, IOException {
         if (valor_transferencia > 0 && this.getSaldo() >= valor_transferencia) {
             this.setSaldo(this.getSaldo() - valor_transferencia);
             conta.depositar(valor_transferencia);
-            this.historico.add(new Transacao("Transferencia", valor_transferencia));
+            Transacao t = new Transacao("Transferencia", valor_transferencia);
+            this.historico.add(t);
+            t.registrar();
         }else {
             throw new InsufficientFundsException("FALHA NA TRANSFERÊNCIA, SALDO INSUFICENTE!");
         }
     }
 
-    public void gerarExtrato() throws IOException {
+    public String gerarExtrato() throws IOException {
+        StringBuilder extrato = new StringBuilder();
+
+        extrato.append("--- EXTRATO BANCARIO ---\n");
+        extrato.append("Titular: ").append( titular.getNome()).append("\n");
+
         for(Transacao transacao: historico) {
-            transacao.registrar();
+            extrato.append(transacao.toString()).append("\n");
         }
+
+        extrato.append("------------------------\n");
+
+        return extrato.toString();
     }
 
     public double verSaldo(){return saldo;}
