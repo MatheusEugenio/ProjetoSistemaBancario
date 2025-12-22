@@ -1,8 +1,7 @@
-package entity.conta;
+package model;
 
-import entity.cliente.Cliente;
-import entity.InsufficientFundsException;
-import entity.InvalidValueException;
+import exception.InsufficientFundsException;
+import exception.InvalidValueException;
 
 public abstract class Conta{
 

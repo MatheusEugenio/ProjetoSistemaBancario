@@ -1,9 +1,7 @@
-package entity.conta.personasdaconta;
+package model;
 
-import entity.cliente.Cliente;
-import entity.conta.Conta;
-import entity.InsufficientFundsException;
-import entity.InvalidValueException;
+import exception.InsufficientFundsException;
+import exception.InvalidValueException;
 
 public class ContaCorrente extends Conta {
 
@@ -24,7 +22,7 @@ public class ContaCorrente extends Conta {
     }
 
     @Override
-    public void depositar(double val_deposito) throws InvalidValueException{//deve implementar transação
+    public void depositar(double val_deposito) throws InvalidValueException {//deve implementar transação
         if (val_deposito > 0) {
             saldo += val_deposito;
         } else {
@@ -42,7 +40,7 @@ public class ContaCorrente extends Conta {
     }
 
     @Override
-    public void transferir(Conta conta, double valor_transferencia) throws InsufficientFundsException{ //deve implementar transação
+    public void transferir(Conta conta, double valor_transferencia) throws InsufficientFundsException { //deve implementar transação
         if (valor_transferencia > 0 && this.getSaldo() >= valor_transferencia) {
             this.setSaldo(this.getSaldo() - valor_transferencia);
             conta.setSaldo(conta.getSaldo() + valor_transferencia);

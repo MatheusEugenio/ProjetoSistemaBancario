@@ -1,10 +1,7 @@
-package entity.conta.personasdaconta;
+package model;
 
-import entity.cliente.Cliente;
-import entity.conta.Conta;
-import entity.InsufficientFundsException;
-import entity.InvalidValueException;
-
+import exception.InsufficientFundsException;
+import exception.InvalidValueException;
 
 public class ContaPoupanca extends Conta implements Tributavel {
 

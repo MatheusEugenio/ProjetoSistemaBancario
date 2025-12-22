@@ -1,11 +1,11 @@
 package service;
 
-import entity.InvalidValueException;
-import entity.Validacoes;
-import entity.cliente.Cliente;
-import entity.cliente.Endereco;
-import entity.cliente.tiposdecliente.ClientePessoaFisica;
-import entity.cliente.tiposdecliente.ClientePessoaJuridica;
+import exception.InvalidValueException;
+import util.Validacoes;
+import model.Cliente;
+import model.Endereco;
+import model.ClientePessoaFisica;
+import model.ClientePessoaJuridica;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;

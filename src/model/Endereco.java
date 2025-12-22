@@ -1,4 +1,4 @@
-package entity.cliente;
+package model;
 
 public class Endereco {
 

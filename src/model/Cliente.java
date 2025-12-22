@@ -1,6 +1,5 @@
-package entity.cliente;
+package model;
 
-import entity.conta.Conta;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -30,9 +29,8 @@ public abstract class Cliente {
         this.endereco = novo_endereco;
     }
 
-    // ESSE METODO RETORNA TODAS AS CONTAS LIGADAS A ESSE CLIENTE
     public void consultarContas() {// esse metodo deve ser revisado quando a Interface Gráfica for implementada
-        System.out.println("--- SUAS CONTAS ---\n");
+        System.out.println("--- Contas do cliente "+nome+" ---\n");
         for (Conta conta : contas) {
             System.out.println(conta.toString());
         }
@@ -46,11 +44,10 @@ public abstract class Cliente {
     @Override
     public String toString() {
         String enderecoImpressao;
-        if (!endereco.getComplemento().equals("nenhum")){
-            enderecoImpressao = endereco.toString() + " | Complemento: "+endereco.getComplemento();
-        } else {
-            enderecoImpressao = endereco.toString();
-        }
+
+        if (!endereco.getComplemento().equalsIgnoreCase("Nenhum") ){
+            enderecoImpressao = endereco.toString() + " | Complemento: "+endereco.getComplemento();}
+        else {enderecoImpressao = endereco.toString();}
 
         return "Nome do cliente - " + nome +
                 ", DataDeNascimento - " + dataDeNascimento.format(formatter) +

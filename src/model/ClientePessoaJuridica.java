@@ -1,7 +1,4 @@
-package entity.cliente.tiposdecliente;
-
-import entity.cliente.Cliente;
-import entity.cliente.Endereco;
+package model;
 
 public class ClientePessoaJuridica extends Cliente {
 

@@ -1,4 +1,6 @@
-package entity;
+package util;
+import exception.InvalidValueException;
+
 import java.util.Scanner;
 
 public class Tratamento {

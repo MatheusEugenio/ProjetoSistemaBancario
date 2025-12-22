@@ -1,6 +1,6 @@
-package teste;
+package app;
 
-import entity.InvalidValueException;
+import exception.InvalidValueException;
 import service.Banco;
 
 import java.util.Scanner;
