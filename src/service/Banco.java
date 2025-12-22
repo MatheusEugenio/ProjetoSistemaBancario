@@ -1,7 +1,7 @@
 package service;
 
 import entity.InvalidValueException;
-import entity.Verficacoes;
+import entity.Validacoes;
 import entity.cliente.Cliente;
 import entity.cliente.Endereco;
 import entity.cliente.tiposdecliente.ClientePessoaFisica;
@@ -32,18 +32,18 @@ public class Banco {
 
         try {
             System.out.println("O cliente é Pessoa Física(PF) ou Pessoa Jurídica(PJ)?");
-            String tipoCliente = Verficacoes.validacaoDasStringsPorPadrao(sc, 2, "pf", "pj");
+            String tipoCliente = Validacoes.validacaoDasStringsPorPadrao(sc, 2, "pf", "pj");
 
             System.out.println("Nome do cliente: ");
             nome = sc.nextLine();
 
             System.out.println("Digite a data de nascimento do cliente: ");
-            dataDeNascimento = Verficacoes.validacaoDasDatas(sc);
+            dataDeNascimento = Validacoes.validacaoDasDatas(sc);
 
             if (tipoCliente.equalsIgnoreCase("PF")){
 
                 System.out.println("CPF do cliente: ");
-                cpf = Verficacoes.validacaoDosInteiros(sc,11);
+                cpf = Validacoes.validacaoDosInteiros(sc,11);
 
                 enderecoDeCriacao = leitorDeEndereco(sc);
                 return this.clientesDoBanco.add(new ClientePessoaFisica(nome, cpf, enderecoDeCriacao, dataDeNascimento));
@@ -83,7 +83,7 @@ public class Banco {
         System.out.println("--- Endereço ---");
 
         System.out.println("Digite o CEP da cidade do cliente: ");
-        String cep = Verficacoes.validacaoDosInteiros(sc, 8);
+        String cep = Validacoes.validacaoDosInteiros(sc, 8);
 
         System.out.println("Digite o nome da cidade do cliente: ");
         String cidade = sc.nextLine();

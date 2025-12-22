@@ -7,7 +7,7 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Scanner;
 
-public class Verficacoes {
+public class Validacoes {
 
     public static String validacaoDasStringsPorPadrao(Scanner sc, int tamanhoIdeal, String padrao, String padrao2){
         boolean valido = false;
