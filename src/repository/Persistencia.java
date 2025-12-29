@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Persistencia <T>{
+public class Persistencia {
 
     private static final String arq_clientes = "arqClientes.txt";
     private static final String arq_contas = "arqContas.txt";
