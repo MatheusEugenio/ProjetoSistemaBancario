@@ -7,8 +7,8 @@ import java.util.List;
 
 public class Persistencia {
 
-    private static final String arq_clientes = "arqClientes.txt";
-    private static final String arq_contas = "arqContas.txt";
+    private static final String arq_clientes = "dados/arqClientes.txt";
+    private static final String arq_contas = "dados/arqContas.txt";
 
     public boolean salvarCliente(List<Cliente> cliente){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(arq_clientes, false))){

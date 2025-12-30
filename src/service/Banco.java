@@ -2,7 +2,6 @@ package service;
 
 import model.*;
 import repository.Persistencia;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Banco {
