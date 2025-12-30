@@ -56,8 +56,8 @@ public class Transacao {
         }
     }
 
-    public String toString(){return "Data da Transação: " + dataTransacao+
-                                    " | Tipo de Transação: " + tipoDeTransacao+
-                                    String.format(" | Valor da Transação: %.2f%n", valTransacao);
+    public String toString(){return "Tipo de Transação: " + tipoDeTransacao+
+                                    "\nData da Transação: " + dataTransacao+
+                                    String.format("\nValor da Transação: %.2f%n \n", valTransacao);
     }
 }

@@ -84,7 +84,6 @@ public abstract class Conta{
             transacaoRecebida.registrar();
 
             return true;
-
         }else {
             System.out.println("FALHA NA TRANSFERÊNCIA, SALDO INSUFICENTE!");
             return false;
