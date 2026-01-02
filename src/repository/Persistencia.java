@@ -130,11 +130,10 @@ public class Persistencia {
         String[] partes = linha.split(";");
         String tipo = partes[0];
 
-        String nomeOUcpf = partes[3];
+        String nome = partes[3];
         Cliente clienteTitular = null;
         for (Cliente cliente : clientes) {
-            //if (nomeOUcpf.equalsIgnoreCase(cliente.getCPF()))
-            if (nomeOUcpf.equalsIgnoreCase(cliente.getNome())) {
+            if (nome.equalsIgnoreCase(cliente.getNome())) {
                 clienteTitular = cliente;
                 break;
             }

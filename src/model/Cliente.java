@@ -39,7 +39,6 @@ public abstract class Cliente {
 
     // esse metodo deve ser revisado quando a Interface Gráfica for implementada
     public List<Conta> consultarContasVinculadas() {return new ArrayList<>(contas);}
-    public void setNome(String nome){this.nome = nome;}
     public String getNome() {return nome;}
     public String getEnderecoARQ() {return endereco.toStringARQ();}
 
