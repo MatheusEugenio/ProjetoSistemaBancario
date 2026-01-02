@@ -18,7 +18,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         Banco banco = new Banco("PACHECO's Bank");
 
-        try {
+        try { //cadastro dos clientes
+
             System.out.println("Quantos clientes deseja cadastrar?");
             int quant = sc.nextInt();
             sc.nextLine();
@@ -36,9 +37,19 @@ public class Main {
 
         try{ // abrir contas
 
-            //mostra os clientes cadastrados
             banco.mostrarClientesDoBanco();
             System.out.println("Qual dos clientes deseja abrir uma conta?");
+
+            boolean verificacao = abrirConta(sc, banco);
+
+            if (verificacao){System.out.println("Conta aberta com sucesso!");}
+
+        }catch (Exception e){
+            System.out.println("ERRO INESPERADO: "+e.getMessage());
+            e.printStackTrace();
+        }
+
+        try {
 
         }catch (Exception e){
 
@@ -47,23 +58,35 @@ public class Main {
     }
 
         public static boolean abrirConta(Scanner sc, Banco banco){
-            int posicaoDoCLiente = sc.nextInt() - 1;
-            sc.nextLine();
+            try {
+                int posicaoDoCLiente = sc.nextInt() - 1;
+                sc.nextLine();
 
-            if (posicaoDoCLiente < 0){ return false;}
-
-            for (Cliente clienteCadastrado : banco.getClientesDoBanco()){
-                if (){
-
+                if (posicaoDoCLiente < 0 || posicaoDoCLiente >= banco.getClientesDoBanco().size()){
+                    throw new IndexOutOfBoundsException("CLIENTE NÃO ENCONTRADO, ESCOLHA UM CLIENTE VÁLIDO!");
                 }
+
+                Cliente clienteReference = banco.getClientesDoBanco().get(posicaoDoCLiente);
+
+                System.out.println("Digite o tipo da conta: Conta Poupança (CP) ou Conta Corrente (CC)");
+                String tipoConta = sc.nextLine();
+
+                if (tipoConta.equalsIgnoreCase("CP") || tipoConta.equalsIgnoreCase("CC")) {
+                    return banco.abrirConta(clienteReference, tipoConta);
+                } else {
+                    throw new IllegalArgumentException("TIPO DE CONTA \""+tipoConta+"\" NÃO VÁLIDO!");
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.println("ERRO, VOCÊ DIGITOU CARACTERES INVÁLIDOS, DIGITE APENAS NÚMEROS!");
+                sc.nextLine();
+                return false;
+            } catch (IllegalArgumentException | IndexOutOfBoundsException e) {
+                System.out.println("ERRO, "+e.getMessage());
+                return false;
             }
-            banco.abrirConta();
-
-
-
-
-            return true;
         }
+
 
         public static boolean adicaoDeCliente(Scanner sc, Banco banco) {
             String cnpj, dataDeNascimento, nome, nomeEmpresa, cpf;
