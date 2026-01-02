@@ -1,5 +1,5 @@
 package model;
 
 public interface Tributavel {
-    double calcularImposto();
+    public double calcularImposto();
 }

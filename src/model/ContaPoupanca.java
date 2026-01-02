@@ -32,7 +32,7 @@ public class ContaPoupanca extends Conta implements Tributavel {
         return tipo +";"+ super.toStringARQ();
     }
 
-    @Override /// FALTA IMPLEMENTAR INTERFACE
+    @Override
     public double calcularImposto() { return taxaRendimento * saldo;}
 
     @Override
