@@ -63,7 +63,6 @@ public class Main {
 
         }catch (Exception e){
             System.out.println("ERRO INESPERADO: "+e.getMessage());
-            e.printStackTrace();
         }
     }
 
