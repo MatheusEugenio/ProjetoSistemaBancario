@@ -112,6 +112,8 @@ public class Main {
                 }
         }
 
+
+
         public static boolean adicaoDeCliente(Scanner sc, Banco banco) {
             String cnpj, dataDeNascimento, nome, nomeEmpresa, cpf;
             Endereco enderecoDeCriacao;
