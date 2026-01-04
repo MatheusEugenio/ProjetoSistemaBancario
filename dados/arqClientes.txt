@@ -6,3 +6,4 @@ PF;Maria das Dores;12345678;rua Fabricio Bruno;centro;110;Quixelô;Nenhum;22/01/
 PF;Marie Jane;12345678;Rua Epitacio;centro;11111;Quixadá Ce;Nenhum;12/10/2003;12345678910
 PF;Matheus Eugenio Granja;12345678;Beco do cacete;sítio;100;Mombança CE;Nenhum;10/11/2005;12344568792
 PJ;Maria das dores;12345678;Rua epitacio;centro;1111;Quixadá CE;Nenhum;22/04/2007;12345678;Quixas americanas
+
