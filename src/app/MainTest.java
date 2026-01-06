@@ -1,5 +1,7 @@
 package app;
 
+import model.Cliente;
+import model.Conta;
 import model.Endereco;
 import service.Banco;
 import util.Validacoes;
@@ -9,25 +11,107 @@ import java.util.Scanner;
 
 public class MainTest {
     public static void main(String[] args) {
-
-        /// FALTA FAZER A MAIN, TESTAR TODAS AS FUNCIONALIDADES, IMPLEMENTAR A INTERFACE GRÁFICA, EU CREIO
+        /// O QUE FALTA?
+        ///FAZER A MAIN (QUE SERIA ONDE A APLICAÇÃO VAI RODAR),
+        /// TESTAR TODAS AS FUNCIONALIDADES - MÉTODOS, PERSISTENCIAS... ,
+        /// IMPLEMENTAR A INTERFACE GRÁFICA
 
         Scanner sc = new Scanner(System.in);
         Banco banco = new Banco("PACHECO's Bank");
 
-        try {
-            System.out.println("Quantos clientes deseja cadastrar?");
-            int quant = sc.nextInt();
-            sc.nextLine();
+        try { //cadastro dos clientes
+            while (true) {
+                try {
+                    System.out.println("Quantos clientes deseja cadastrar?");
+                    int quant = sc.nextInt();
+                    sc.nextLine();
 
-            for (int i = 0; i < quant; i++) {
-               adicaoDeCliente(sc,banco);
+                    if (quant < 0) {
+                        throw new InputMismatchException("Número não pode ser negativo!");
+                    }
+
+                    boolean verificacao;
+                    for (int i = 0; i < quant; i++) {
+                        verificacao = adicaoDeCliente(sc, banco);
+                        if (verificacao) {
+                            System.out.println("Cadastro de clientes realizado com sucesso!");
+                        }
+                    }
+
+                    break;
+
+                } catch (InputMismatchException e) {
+                    System.out.println("ERRO, DIGITOU CARACTERES NO LOCAL ERRADO! " + e.getMessage());
+                    System.out.println("Por favor, tente novamente.");
+                    sc.nextLine();
+                }
             }
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("ERRO GERAL, "+e.getMessage());
+        }
+
+        try{ // abrir contas
+
+            //banco.mostrarClientesDoBanco();
+            banco.mostrarClientesComContasVinculadas();
+            System.out.println("Qual dos clientes deseja abrir uma conta?");
+
+            boolean verificacao = abrirConta(sc, banco);
+
+            if (verificacao){System.out.println("Conta aberta com sucesso!");}
+
+        }catch (Exception e){
+            System.out.println("ERRO INESPERADO: "+e.getMessage());
         }
     }
+
+    public static boolean abrirConta(Scanner sc, Banco banco) {
+        try {
+            int posicaoDoCLiente = sc.nextInt() - 1;
+            sc.nextLine();
+
+            if (posicaoDoCLiente < 0 || posicaoDoCLiente >= banco.getClientesDoBanco().size()) {
+                throw new IndexOutOfBoundsException("CLIENTE NÃO ENCONTRADO, ESCOLHA UM CLIENTE VÁLIDO!");
+            }
+
+            Cliente clienteReference = banco.getClientesDoBanco().get(posicaoDoCLiente);
+
+            while (true) {
+                try {
+                    System.out.println("Qual o tipo de conta que "+clienteReference.getNome()+" deseja abrir?\n-Conta Poupança (CP)\n-Conta Corrente (CC)");
+                    String tipoConta = sc.nextLine();
+
+                    if (tipoConta.equalsIgnoreCase("CP") || tipoConta.equalsIgnoreCase("CC")) {
+
+                        for (Conta contaExistente : clienteReference.consultarContasVinculadas()) {
+                            if (contaExistente.getTipo().equalsIgnoreCase(tipoConta)) {
+                                throw new IllegalArgumentException("ERRO, O CLIENTE JÁ POSSUI UMA CONTA DO TIPO \"" + tipoConta.toUpperCase() + "\" VINCULADA!");
+                            }
+                        }
+
+                        return banco.abrirConta(clienteReference, tipoConta);
+                    } else {
+                        throw new IllegalArgumentException("TIPO DE CONTA \"" + tipoConta + "\" NÃO VÁLIDO!");
+                    }
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println("ERRO, "+e.getMessage());
+                    System.out.println("Por favor, tente novamente.");
+                }
+            }
+
+        }catch (InputMismatchException e) {
+            System.out.println("ERRO, VOCÊ DIGITOU CARACTERES INVÁLIDOS, DIGITE APENAS NÚMEROS!");
+            sc.nextLine();
+            return false;
+        }catch (IndexOutOfBoundsException e) {
+            System.out.println("ERRO, " + e.getMessage());
+            return false;
+        }
+    }
+
+
 
     public static boolean adicaoDeCliente(Scanner sc, Banco banco) {
         String cnpj, dataDeNascimento, nome, nomeEmpresa, cpf;
