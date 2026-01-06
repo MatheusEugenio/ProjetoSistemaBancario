@@ -1,9 +1,9 @@
 # Sistema de Gerenciamento de Contas Bancarias
 Trabalho final da cadeira de POO do professor Ênio.
 
->O Sistema consiste em um sistemas de gerenciamento de contas bancárias, incluindo interações com o cliente por interface gráfica (Java Swing).
+- O Sistema consiste em um sistemas de gerenciamento de contas bancárias, incluindo interações com o cliente por interface gráfica (Java Swing).
 
->O objetivo real do projeto é trabalhar todos os conceitos da Programação Orientada á Objetos (POO).
+- O objetivo real do projeto é trabalhar todos os conceitos da Programação Orientada á Objetos (POO).
 
 Principais telas e funcionalidades:
 -
