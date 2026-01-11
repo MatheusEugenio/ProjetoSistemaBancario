@@ -4,11 +4,16 @@ import exception.InvalidValueException;
 import model.Cliente;
 import model.Conta;
 import model.Endereco;
+import repository.Transacao;
 import service.Banco;
 import util.Validacoes;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
     public class BancoGUI extends JFrame {
@@ -16,7 +21,8 @@ import java.util.List;
         private Banco banco;
 
         private JTabbedPane abas;
-        private JTextArea areaLog; // Onde vamos "imprimir" os dados
+        private JTextArea areaLog; // Onde imprime os dados
+        private JTextArea areaTransacoes;
         private JComboBox<String> comboClientes; // Para escolher clientes na hora de abrir conta
 
         private JTextField txtNome, txtDoc, txtDataNasc, txtNomeEmpresa;
@@ -430,7 +436,6 @@ import java.util.List;
                         JOptionPane.showMessageDialog(this, "Cliente não encontrado no banco de dados.");
                     }
                     else if (novaConta != null) {
-                        // mostra o resultado na caixa de texto
                         areaResultado.setText("");
                         areaResultado.append("SUCESSO!\n");
                         areaResultado.append("Cliente: " + nomeCliente + "\n");
@@ -441,7 +446,7 @@ import java.util.List;
                         // limpa os campos
                         txtSenha.setText("");
                         txtDeposito.setText("0.00");
-                        atualizarAreaLog(); // Atualiza log geral se existir
+                        atualizarAreaLog();
                     } else {
                         JOptionPane.showMessageDialog(this, "Erro ao criar conta.");
                     }
@@ -468,6 +473,7 @@ import java.util.List;
             painel.add(new JScrollPane(areaLog), BorderLayout.CENTER);
 
             JButton btnAtualizar = new JButton("Atualizar Listagem");
+            btnAtualizar.setFont(new Font("SansSerif", Font.BOLD, 12));
             btnAtualizar.addActionListener(e -> atualizarAreaLog());
             painel.add(btnAtualizar, BorderLayout.SOUTH);
 
@@ -475,9 +481,26 @@ import java.util.List;
         }
 
         private JPanel criarPainelTransacoes(){
-            JPanel painel = new JPanel(new GridLayout(12, 2, 10, 10));
-            painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            JPanel painel = new JPanel(new BorderLayout());
 
+            areaTransacoes = new JTextArea();
+            areaTransacoes.setEditable(false); // Apenas leitura
+            areaTransacoes.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            areaTransacoes.setBackground(new Color(250, 250, 250)); // Um fundo levemente diferente (opcional)
+
+            // Adiciona a barra de rolagem
+            painel.add(new JScrollPane(areaTransacoes), BorderLayout.CENTER);
+
+            // Botão de Atualizar
+            JButton btnAtualizar = new JButton("Atualizar Histórico de Transações");
+            btnAtualizar.setFont(new Font("SansSerif", Font.BOLD, 12));
+
+            btnAtualizar.addActionListener(e -> carregarTransacoesDoArquivo());
+
+            painel.add(btnAtualizar, BorderLayout.SOUTH);
+
+            // Carrega os dados assim que a aba é criada
+            carregarTransacoesDoArquivo();
 
             return painel;
         }
@@ -490,6 +513,80 @@ import java.util.List;
         }
 
         // --- Métodos Auxiliares ---
+
+        private void carregarTransacoesDoArquivo() {
+            areaTransacoes.setText("");
+            String caminhoArquivo = "dados/RegistroDeTransacoes.txt"; // Caminho conforme sua imagem
+
+            try {
+                Path path = Paths.get(caminhoArquivo);
+
+                if (Files.exists(path)) {
+                    List<String> linhas = Files.readAllLines(path);
+
+                    if (linhas.isEmpty()) {
+                        areaTransacoes.append("Nenhuma transação registrada ainda.\n");
+                        return;
+                    }
+
+                    areaTransacoes.append("--- EXTRATO DE MOVIMENTAÇÕES ---\n\n");
+
+                    for (String linha : linhas) {
+                        if (linha.trim().isEmpty() || linha.startsWith("---")) {
+                            continue;
+                        }
+
+                        try {
+                            String[] partes = linha.split("\\|");
+
+                            String data = " ";
+                            String tipo = " ";
+                            String valor = "0.00";
+                            String destinatario = null;
+
+                            for (String parte : partes) {
+                                parte = parte.trim();
+
+                                if (parte.startsWith("Data")) {
+                                    data = parte.substring(parte.indexOf(":") + 1).trim();
+                                } else if (parte.toLowerCase().contains("tipo")) {
+                                    tipo = parte.substring(parte.indexOf(":") + 1).trim();
+                                } else if (parte.toLowerCase().contains("valor")) {
+                                    valor = parte.substring(parte.indexOf(":") + 1).trim();
+                                } else if (parte.startsWith("Destinatário")) {
+                                    destinatario = parte.substring(parte.indexOf(":") + 1).trim();
+                                }
+                            }
+
+                            areaTransacoes.append("DATA: " + data + "\n");
+
+                            if (destinatario != null) {
+                                areaTransacoes.append("FAVORECIDO: " + destinatario + "\n");
+                            }
+
+                            areaTransacoes.append("TIPO DA TRANSAÇÃO: " + tipo.toUpperCase() + "\n");
+
+                            try {
+                                double valorDouble = Double.parseDouble(valor);
+                                areaTransacoes.append("VALOR DA TRANSAÇÃO: R$ " + String.format("%.2f", valorDouble) + "\n");
+                            } catch (NumberFormatException e) {
+                                areaTransacoes.append("VALOR DA TRANSAÇÃO: R$ " + valor + "\n");
+                            }
+
+                            areaTransacoes.append("---------------------------\n");
+
+                        } catch (Exception e) {
+                            // Se der erro numa linha específica, imprime ela crua para não perder dados
+                            areaTransacoes.append("Reg. Bruto: " + linha + "\n\n");
+                        }
+                    }
+                } else {
+                    areaTransacoes.append("Arquivo de registros não encontrado.\nFaça uma transação para criar o arquivo.");
+                }
+            } catch (IOException e) {
+                areaTransacoes.append("Erro ao ler arquivo: " + e.getMessage());
+            }
+        }
 
         // Atualiza o ComboBox da aba de Contas para aparecer novos clientes
         private void atualizarListaClientesCombo() {
