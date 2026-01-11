@@ -508,13 +508,12 @@ import java.util.List;
             for (Cliente c : clientes) {
                 areaLog.append("Cliente: " + c.getNome() + "\n");
 
-                // tem que mudar isso pois usa "var"
-                var contas = c.consultarContasVinculadas();
+                List<Conta> contas = c.consultarContasVinculadas();
                 if (contas.isEmpty()) {
                     areaLog.append("   (Sem contas)\n");
                 } else {
-                    for (var conta : contas) {
-                        areaLog.append("   -> Conta " + conta.getTipo() + " | Saldo: " + conta.getSaldo() + "\n");
+                    for (Conta conta : contas) {
+                        areaLog.append("   -> Conta " + conta.getTipo() + " | Saldo: R$ " + String.format("%.2f",conta.getSaldo()) + "\n");
                     }
                 }
                 areaLog.append("---------------------------\n");
