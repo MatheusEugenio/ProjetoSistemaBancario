@@ -2,6 +2,9 @@ package service;
 
 import model.*;
 import repository.Persistencia;
+import util.Validacoes;
+
+import java.io.IOException;
 import java.util.List;
 
 public class Banco {
@@ -59,8 +62,6 @@ public class Banco {
         }
     }
 
-
-
     //pessoa física
     public boolean adicionarCliente(String nome, String cpf, Endereco endereco, String dataNascimento) {
         if (nome == null || cpf == null || endereco == null || dataNascimento == null){return false;}
@@ -81,7 +82,7 @@ public class Banco {
         return true;
     }
 
-    public boolean abrirConta(Cliente cliente, String tipoConta){
+    public boolean abrirConta(Cliente cliente, String tipoConta) throws IllegalArgumentException{
         if (cliente == null){throw new IllegalArgumentException("Cliente não pode ser nulo.");}
 
         Conta novaConta;
@@ -96,5 +97,32 @@ public class Banco {
         return true;
     }
 
-    public List<Cliente> getClientesDoBanco() {return clientesDoBanco;}
+    public Conta abrirConta(Cliente cliente, String tipoConta, double depositoInicial) throws IllegalArgumentException, IOException {
+        if (cliente == null){throw new IllegalArgumentException("Cliente não pode ser nulo.");}
+
+        Conta novaConta;
+
+        if (Validacoes.validaTipoDaContaExistente(cliente, tipoConta)){
+            throw new IllegalArgumentException("ERRO: "+ cliente.getNome() +" já possui uma conta do tipo \"" + tipoConta + "\"");
+        }
+
+        if (tipoConta.equalsIgnoreCase("CC")){
+            novaConta = new ContaCorrente(cliente);
+        } else if (tipoConta.equalsIgnoreCase("CP")) {
+            novaConta = new ContaPoupanca(cliente);
+        }else {
+            throw new IllegalArgumentException("Tipo de conta inválido: " + tipoConta);
+        }
+        novaConta.depositar(depositoInicial);
+
+        cliente.vincularConta(novaConta);
+        this.contasDoBanco.add(novaConta);
+        this.bancoDeDados.salvarConta(contasDoBanco);
+
+        return novaConta;
+    }
+
+    public List<Cliente> getClientesDoBanco() {
+            return clientesDoBanco;
+    }
 }

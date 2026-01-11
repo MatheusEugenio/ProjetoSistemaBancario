@@ -54,7 +54,6 @@
 //
 //        try{ // abrir contas
 //
-//            //banco.mostrarClientesDoBanco();
 //            banco.mostrarClientesComContasVinculadas();
 //            System.out.println("Qual dos clientes deseja abrir uma conta?");
 //
@@ -65,12 +64,6 @@
 //        }catch (Exception e){
 //            System.out.println("ERRO INESPERADO: "+e.getMessage());
 //        }
-//
-////        try{ // transações
-////
-////        }catch (){
-////
-////        }
 //
 //    }
 //
