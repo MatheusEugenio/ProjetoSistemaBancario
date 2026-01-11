@@ -2,6 +2,7 @@ package app;
 
 import exception.InvalidValueException;
 import model.Cliente;
+import model.ClientePessoaFisica;
 import model.Conta;
 import model.Endereco;
 import service.Banco;
@@ -13,34 +14,31 @@ import java.util.List;
 
     public class BancoGUI extends JFrame {
 
-        // Referência ao seu Service (O "Cérebro" do sistema)
         private Banco banco;
 
-        // Componentes da Interface (Campos que substituem o Scanner)
         private JTabbedPane abas;
         private JTextArea areaLog; // Onde vamos "imprimir" os dados
         private JComboBox<String> comboClientes; // Para escolher clientes na hora de abrir conta
 
-        // Campos de Cadastro de Cliente
         private JTextField txtNome, txtDoc, txtDataNasc, txtNomeEmpresa;
         private JTextField txtRua, txtCep, txtNum, txtBairro, txtCidade, txtComplemento;
         private JComboBox<String> comboTipoCliente;
 
         public BancoGUI() {
-            // 1. Inicializa o Banco (Carrega arquivos, faz a persistência funcionar)
+            // Inicialização do Banco (Carrega arquivos, faz a persistência funcionar)
             banco = new Banco("PACHECO's Bank");
 
-            // 2. Configuração básica da Janela
             setTitle("Sistema Bancário - Pacheco's Bank");
             setSize(800, 600);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
 
-            // 3. Criando as Abas
             abas = new JTabbedPane();
             abas.addTab("Cadastro de Clientes", criarPainelCadastro());
-            abas.addTab("Abrir Conta", criarPainelContas());
+            abas.addTab("Cadastrar Conta", criarPainelContas());
+            abas.addTab("Transações", criarPainelDeTransacoes()); //falta implementação
             abas.addTab("Visão Geral", criarPainelListagem());
+            abas.addTab("Visão Geral das Transações", criarPainelTransacoes()); //falta implementação
 
             add(abas);
 
@@ -49,84 +47,209 @@ import java.util.List;
             atualizarAreaLog();
         }
 
-        // --- ABA 1: CADASTRO (Substitui o metodo adicaoDeCliente) ---
+        // CADASTRO (Substitui o metodo adicaoDeCliente)
         private JPanel criarPainelCadastro() {
-            JPanel painel = new JPanel(new GridLayout(12, 2, 10, 10));
+            JPanel painel = new JPanel(new GridBagLayout());
             painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-            painel.add(new JLabel("")); // Espaço vazio
-            painel.add(new JLabel("DADOS PESSOAIS"));
-            painel.add(new JLabel("")); // Espaço vazio
+            // Configurações de posicionamento (GBC)
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
 
-            // Campos do Formulário
-            painel.add(new JLabel("Tipo de Cliente:"));
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.gridwidth = 2;
+            gbc.insets = new Insets(0, 5, 10, 5);
+
+            JLabel lblHeaderDados = new JLabel("DADOS PESSOAIS");
+            lblHeaderDados.setFont(lblHeaderDados.getFont().deriveFont(Font.BOLD, 14f));
+            lblHeaderDados.setHorizontalAlignment(SwingConstants.CENTER); // Centralizado
+            painel.add(lblHeaderDados, gbc);
+
+            // RESET DAS CONFIGURAÇÕES PARA OS CAMPOS NORMAIS
+            gbc.gridwidth = 1;
+            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.gridy++;
+
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("Tipo de Cliente:"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
             comboTipoCliente = new JComboBox<>(new String[]{"Pessoa Física", "Pessoa Jurídica"});
-            painel.add(comboTipoCliente);
+            painel.add(comboTipoCliente, gbc);
 
-            String tipoDoClienteCombo = (String) comboTipoCliente.getSelectedItem();
-            String comboCliente;
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("Nome do Cliente:"), gbc);
 
-            if (tipoDoClienteCombo.equals("Pessoa Física")){
-                comboCliente = "PF";
-            } else if  (tipoDoClienteCombo.equals("Pessoa Jurídica")){
-                comboCliente = "PJ";
-            } else {
-                comboCliente = "";
-            }
-
-            painel.add(new JLabel("Nome do Cliente:"));
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
             txtNome = new JTextField();
-            painel.add(txtNome);
+            painel.add(txtNome, gbc);
 
-            //quero alterar essa parte para aparecer só cpf quando o cliente for PF
-            // e aparecer só cnpj e tambem nomeDaEmpresa para quando o cliente for PJ
-            painel.add(new JLabel("CPF / CNPJ:"));
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            JLabel lblDoc = new JLabel("CPF:");
+            painel.add(lblDoc, gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
             txtDoc = new JTextField();
-            painel.add(txtDoc);
+            painel.add(txtDoc, gbc);
 
-            painel.add(new JLabel("Data de Nascimento (dd/MM/yyyy):"));
+            // Nome da Empresa (Opcional)
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            JLabel lblEmpresa = new JLabel("Nome da Empresa:");
+            painel.add(lblEmpresa, gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            txtNomeEmpresa = new JTextField();
+            painel.add(txtNomeEmpresa, gbc);
+
+
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("Data de Nascimento (dd/MM/yyyy):"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
             txtDataNasc = new JTextField();
-            painel.add(txtDataNasc);
+            painel.add(txtDataNasc, gbc);
 
-            //painel.add(new JLabel("Nome da Empresa:")); txtNomeEmpresa = new JTextField(); painel.add(txtNomeEmpresa);
-            //rever essa lógica de nomeDaEmpresa, ela deve aparecer só se o cliente for PJ
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.gridwidth = 2;
+            gbc.insets = new Insets(20, 5, 5, 5);
+            JLabel lblHeaderEndereco = new JLabel("ENDEREÇO");
+            lblHeaderEndereco.setFont(lblHeaderEndereco.getFont().deriveFont(Font.BOLD, 14f));
+            lblHeaderEndereco.setHorizontalAlignment(SwingConstants.CENTER);
+            painel.add(lblHeaderEndereco, gbc);
 
-            // Endereço (Simplificado para o exemplo)
-            painel.add(new JLabel("ENDEREÇO"));
-            painel.add(new JLabel("")); // Espaço vazio
+            // Reseta configurações
+            gbc.gridwidth = 1;
+            gbc.insets = new Insets(5, 5, 5, 5);
 
-            painel.add(new JLabel("Rua:")); txtRua = new JTextField(); painel.add(txtRua);
-            painel.add(new JLabel("CEP:")); txtCep = new JTextField(); painel.add(txtCep);
-            painel.add(new JLabel("Número:")); txtNum = new JTextField(); painel.add(txtNum);
-            painel.add(new JLabel("Bairro:")); txtBairro = new JTextField(); painel.add(txtBairro);
-            painel.add(new JLabel("Cidade:")); txtCidade = new JTextField(); painel.add(txtCidade);
-            //revisar aqui essa parrte de "complemento"
-            painel.add(new JLabel("Complemento:")); txtComplemento = new JTextField(); painel.add(txtComplemento);
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("Rua:"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            txtRua = new JTextField();
+            painel.add(txtRua, gbc);
+
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("CEP:"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            txtCep = new JTextField();
+            painel.add(txtCep, gbc);
+
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("Número:"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            txtNum = new JTextField();
+            painel.add(txtNum, gbc);
+
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("Bairro:"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            txtBairro = new JTextField();
+            painel.add(txtBairro, gbc);
+
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("Cidade:"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            txtCidade = new JTextField();
+            painel.add(txtCidade, gbc);
+
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("Complemento:"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            txtComplemento = new JTextField();
+            painel.add(txtComplemento, gbc);
+
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.NONE;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.insets = new Insets(20, 5, 5, 5);
 
             JButton btnSalvar = new JButton("Salvar Cliente");
-            painel.add(btnSalvar);
+            btnSalvar.setPreferredSize(new Dimension(150, 30));
+            painel.add(btnSalvar, gbc);
 
-            // --- A LÓGICA DO BOTÃO (Onde a mágica acontece) ---
+            lblEmpresa.setVisible(false);
+            txtNomeEmpresa.setVisible(false);
+
+            comboTipoCliente.addActionListener(e -> {
+                String selecionado = (String) comboTipoCliente.getSelectedItem();
+                if ("Pessoa Física".equals(selecionado)) {
+                    lblDoc.setText("CPF:");
+                    lblEmpresa.setVisible(false);
+                    txtNomeEmpresa.setVisible(false);
+                } else {
+                    lblDoc.setText("CNPJ:");
+                    lblEmpresa.setVisible(true);
+                    txtNomeEmpresa.setVisible(true);
+                }
+                painel.revalidate();
+                painel.repaint();
+            });
+
             btnSalvar.addActionListener(e -> {
                 try {
-                    // 1. Coletar dados dos campos (Não usa Scanner!)
                     String nome = txtNome.getText();
                     String doc = txtDoc.getText();
                     String data = txtDataNasc.getText();
-                    String tipo = comboCliente;
-                    //String nomeDaEmpresa = txtNomeEmpresa.getText();
                     String complemento = txtComplemento.getText();
+                    String selecionado = (String) comboTipoCliente.getSelectedItem();
+                    boolean isPF = "Pessoa Física".equals(selecionado);
+                    String nomeDaEmpresa = txtNomeEmpresa.getText();
+
                     Validacoes.validacaoDasStrings(nome);
-                    Validacoes.validacaoDasStrings(doc, 11);// para o cpf
                     Validacoes.validacaoDasDatas(data);
 
-                    if (complemento.trim().isEmpty() || complemento.trim() == null) {
-                        complemento = "Nenhum";
+                    if (isPF) {
+                        Validacoes.validacaoDasStrings(doc, 11);
+                    } else {
+                        Validacoes.validacaoDasStrings(doc, 14);
+                        if (nomeDaEmpresa == null || nomeDaEmpresa.trim().isEmpty()) {
+                            throw new InvalidValueException("Nome da empresa obrigatório.");
+                        }
                     }
 
-//                  if (nomeDaEmpresa.trim().isEmpty() || nomeDaEmpresa.trim() == null) {
-//                        nomeDaEmpresa = "Empresa Default";
-//                  }
+                    if (complemento == null || complemento.trim().isEmpty()) complemento = "Nenhum";
 
                     Endereco novoEndereco = new Endereco(
                             txtRua.getText(), txtCep.getText(),
@@ -134,100 +257,28 @@ import java.util.List;
                             txtBairro.getText(), txtCidade.getText()
                     );
 
-                    // 2. Chama o seu Banco
                     boolean sucesso;
-
-                    if (tipo.equals("PF")) {
+                    if (isPF) {
                         sucesso = banco.adicionarCliente(nome, doc, novoEndereco, data);
                     } else {
-                        sucesso = banco.adicionarCliente(nome, doc, novoEndereco, data, "Empresa Default");
+                        sucesso = banco.adicionarCliente(nome, doc, novoEndereco, data, nomeDaEmpresa);
                     }
 
                     if (sucesso) {
                         JOptionPane.showMessageDialog(this, "Cliente Cadastrado!");
                         limparCamposCadastro();
-                        atualizarListaClientesCombo(); // Atualiza a outra aba
-                        atualizarAreaLog(); // Atualiza a listagem
+                        comboTipoCliente.setSelectedIndex(0);
+                        atualizarListaClientesCombo();
+                        atualizarAreaLog();
                     } else {
                         JOptionPane.showMessageDialog(this, "Erro ao cadastrar.");
                     }
 
-                }catch (InvalidValueException ex) {
+                } catch (InvalidValueException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage());
                 } catch (NumberFormatException ex) {
-                    // Tratamento específico se digitar letras no número da casa
-                    JOptionPane.showMessageDialog(this, "Erro: O campo 'Número' aceita apenas dígitos!");
+                    JOptionPane.showMessageDialog(this, "Erro: Campo 'Número' deve ser numérico.");
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Erro nos dados: " + ex.getMessage());
-                }
-            });
-
-            return painel;
-        }
-
-        // --- ABA 2: ABRIR CONTA (Substitui o metodo abrirConta) ---
-        private JPanel criarPainelContas() {
-            JPanel painel = new JPanel(new FlowLayout());
-
-            painel.add(new JLabel("Selecione o Cliente:"));
-            comboClientes = new JComboBox<>();
-            painel.add(comboClientes);
-
-            painel.add(new JLabel("Tipo de Conta:"));
-            JComboBox<String> comboTipoConta = new JComboBox<>(new String[]{"Conta Corrente", "Conta Poupança"});
-            painel.add(comboTipoConta);
-
-            String tipoDaContaCombo = (String) comboTipoConta.getSelectedItem();
-
-            if (tipoDaContaCombo.equals("Conta Corrente")) {
-                tipoDaContaCombo = "CC";
-            } else if (tipoDaContaCombo.equals("Conta Poupança")) {
-                tipoDaContaCombo = "CP";
-            }
-
-            JButton btnAbrir = new JButton("Abrir Conta");
-            painel.add(btnAbrir);
-
-            String finalTipoDaContaCombo = tipoDaContaCombo;
-            btnAbrir.addActionListener(e -> {
-                try {
-                    String nomeSelecionado = (String) comboClientes.getSelectedItem();
-                    String tipoConta = finalTipoDaContaCombo;
-
-                    // Busca o objeto Cliente na lista do banco
-                    Cliente clienteAlvo = banco.getClientesDoBanco().stream()
-                            .filter(c -> c.getNome().equals(nomeSelecionado))
-                            .findFirst()
-                            .orElse(null);
-
-                    //verificação de existência de conta
-                    if (tipoConta.equalsIgnoreCase("CP") || tipoConta.equalsIgnoreCase("CC")) {
-
-                        for (Conta contaExistente : clienteAlvo.consultarContasVinculadas()) {
-                            if (contaExistente.getTipo().equalsIgnoreCase(tipoConta)) {
-                                throw new IllegalArgumentException("ERRO: o cliente já possui uma conta do tipo \"" + tipoConta.toUpperCase() + "\" vinculada!");
-                            }
-                        }
-
-                    } else {
-                        throw new IllegalArgumentException("ERRO: tipo de conta \"" + tipoConta.trim() + "\" não válido!");
-                    }
-
-                    // abre a conta
-                    if (clienteAlvo != null) {
-                        boolean abriu = banco.abrirConta(clienteAlvo, tipoConta);
-
-                        if (abriu) {
-                            JOptionPane.showMessageDialog(this, "Conta " + tipoConta.trim() + " aberta com sucesso!");
-                            atualizarAreaLog();
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Erro ao abrir conta (Verifique se já existe).");
-                        }
-                    }
-
-                }catch (IllegalArgumentException ex) {
-                    JOptionPane.showMessageDialog(this, ex.getMessage());
-                }catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
                 }
             });
@@ -235,7 +286,180 @@ import java.util.List;
             return painel;
         }
 
-        // --- ABA 3: LISTAGEM (Substitui mostrarClientesComContasVinculadas) ---
+        // ABRIR CONTA
+        private JPanel criarPainelContas() {
+            JPanel painel = new JPanel(new GridBagLayout());
+            painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(10, 10, 10, 10);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+
+            Font fonteCampos = new Font("SansSerif", Font.PLAIN, 14);
+
+            // TÍTULO
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.gridwidth = 2;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.insets = new Insets(0, 0, 20, 0);
+
+            JLabel lblTitulo = new JLabel("ABERTURA DE NOVA CONTA");
+            lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 16));
+            lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+            painel.add(lblTitulo, gbc);
+
+            // Reset para os campos
+            gbc.gridwidth = 1;
+            gbc.insets = new Insets(5, 5, 5, 5);
+            gbc.anchor = GridBagConstraints.WEST;
+
+            // 1. Selecionar Cliente
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            painel.add(new JLabel("Selecione o Cliente:"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.ipady = 8;
+            // Combo deve ser atributo da classe para ser atualizado depois
+            comboClientes = new JComboBox<>();
+            comboClientes.setFont(fonteCampos);
+            painel.add(comboClientes, gbc);
+
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            gbc.ipady = 0;
+            painel.add(new JLabel("Tipo de Conta:"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.ipady = 8;
+            String[] tiposConta = {"Conta Corrente", "Conta Poupança"};
+            JComboBox<String> comboTipoConta = new JComboBox<>(tiposConta);
+            comboTipoConta.setFont(fonteCampos);
+            painel.add(comboTipoConta, gbc);
+
+            // Depósito Inicial
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            gbc.ipady = 0;
+            painel.add(new JLabel("Depósito Inicial (R$):"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.ipady = 8;
+            JTextField txtDeposito = new JTextField("0.00");
+            txtDeposito.setFont(fonteCampos);
+            painel.add(txtDeposito, gbc);
+
+            // Senha da Conta
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.weightx = 0.0;
+            gbc.ipady = 0;
+            painel.add(new JLabel("Crie uma Senha (4 dígitos):"), gbc);
+
+            gbc.gridx = 1;
+            gbc.weightx = 1.0;
+            gbc.ipady = 8;
+            JPasswordField txtSenha = new JPasswordField(); // Campo de senha para esconder os caracteres
+            txtSenha.setFont(fonteCampos);
+            painel.add(txtSenha, gbc);
+
+            // Botão
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.NONE;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.insets = new Insets(20, 0, 20, 0);
+
+            JButton btnAbrir = new JButton("Confirmar Abertura");
+            btnAbrir.setFont(new Font("SansSerif", Font.BOLD, 14));
+            btnAbrir.setPreferredSize(new Dimension(200, 40));
+            painel.add(btnAbrir, gbc);
+
+            // Área de Resultado
+            gbc.gridy++;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+
+            JTextArea areaResultado = new JTextArea(4, 20);
+            areaResultado.setEditable(false);
+            areaResultado.setBackground(new Color(240, 240, 240));
+            areaResultado.setBorder(BorderFactory.createTitledBorder("Dados da Conta Criada"));
+            areaResultado.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            painel.add(new JScrollPane(areaResultado), gbc);
+
+
+            // LÓGICA DO BOTÃO
+            btnAbrir.addActionListener(e -> {
+                try {
+                    //Validações básicas de UI
+                    String nomeCliente = (String) comboClientes.getSelectedItem();
+                    if (nomeCliente == null) {
+                        JOptionPane.showMessageDialog(this, "Selecione um cliente!");
+                        return;
+                    }
+
+                    double valorDeposito = Double.parseDouble(txtDeposito.getText().replace(",", "."));
+                    String senha = new String(txtSenha.getPassword());
+
+                    if (senha.length() != 4) {
+                        JOptionPane.showMessageDialog(this, "A senha deve ter exatamente 4 dígitos.");
+                        return;
+                    }
+
+                    String tipoSelecionado = (String) comboTipoConta.getSelectedItem();
+                    String finalTipoConta = tipoSelecionado.equalsIgnoreCase("Conta Corrente")? "CC" : "CP";
+
+                    boolean achouCliente = false;
+                    Conta novaConta = null;
+
+                    for(Cliente clienteAlvo : banco.getClientesDoBanco()){
+                        if(clienteAlvo.getNome().equalsIgnoreCase(nomeCliente)){ //se achou o nome do alvo ele entra no if
+                                achouCliente = true;
+                                novaConta = banco.abrirConta(clienteAlvo, finalTipoConta, valorDeposito);
+                                break;
+                        }
+                    }
+
+                    if (!achouCliente) {
+                        JOptionPane.showMessageDialog(this, "Cliente não encontrado no banco de dados.");
+                    }
+                    else if (novaConta != null) {
+                        // mostra o resultado na caixa de texto
+                        areaResultado.setText("");
+                        areaResultado.append("SUCESSO!\n");
+                        areaResultado.append("Cliente: " + nomeCliente + "\n");
+                        areaResultado.append("Tipo: " + tipoSelecionado + "\n");
+                        areaResultado.append("Número da Conta: " + novaConta.getNumero() + "\n");
+                        areaResultado.append("Saldo Inicial: R$ " + String.format("%.2f", valorDeposito));
+
+                        // limpa os campos
+                        txtSenha.setText("");
+                        txtDeposito.setText("0.00");
+                        atualizarAreaLog(); // Atualiza log geral se existir
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Erro ao criar conta.");
+                    }
+
+                }catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Valor de depósito inválido.");
+                }catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(this,ex.getMessage());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+                }
+            });
+
+            return painel;
+        }
+
+        //LISTAGEM (Substitui mostrarClientesComContasVinculadas)
         private JPanel criarPainelListagem() {
             JPanel painel = new JPanel(new BorderLayout());
             areaLog = new JTextArea();
@@ -251,6 +475,21 @@ import java.util.List;
             return painel;
         }
 
+        private JPanel criarPainelTransacoes(){
+            JPanel painel = new JPanel(new GridLayout(12, 2, 10, 10));
+            painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+
+            return painel;
+        }
+
+        private JPanel criarPainelDeTransacoes(){
+            JPanel painel = new JPanel(new GridLayout(12, 2, 10, 10));
+            painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+            return painel;
+        }
+
         // --- Métodos Auxiliares ---
 
         // Atualiza o ComboBox da aba de Contas para aparecer novos clientes
@@ -262,17 +501,15 @@ import java.util.List;
             }
         }
 
-        // Simula o System.out.println jogando texto na tela
         private void atualizarAreaLog() {
             areaLog.setText(""); // Limpa
             areaLog.append("--- CLIENTES E CONTAS ---\n\n");
 
-            //talvez tenha que verificar se a lista de clientes do banco está atualizada com a do arquivo.txt
             List<Cliente> clientes = banco.getClientesDoBanco();
             for (Cliente c : clientes) {
                 areaLog.append("Cliente: " + c.getNome() + "\n");
 
-                // Aqui usei sua lógica de pegar contas
+                // tem que mudar isso pois usa "var"
                 var contas = c.consultarContasVinculadas();
                 if (contas.isEmpty()) {
                     areaLog.append("   (Sem contas)\n");
@@ -290,15 +527,12 @@ import java.util.List;
             txtDoc.setText("");
             txtDataNasc.setText("");
             txtRua.setText("");
-            // ... limpar os outros
         }
 
         // Metodo Main para rodar a tela
         public static void main(String[] args) {
-            // Estilo visual nativo do Windows/Mac/Linux
-            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception ignored) {}
 
-            // Inicia a tela
+            try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception ignored) {}
             SwingUtilities.invokeLater(() -> new BancoGUI().setVisible(true));
         }
 }

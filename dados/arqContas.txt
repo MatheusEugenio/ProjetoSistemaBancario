@@ -1,7 +1,8 @@
 CP;1;1;Matheus Eugenio;0.0
 CP;1;1;Maria Alicia;0.0
-CP;1;1;Maria das Dores;0.0
 CP;1;1;Matheus Eugenio Granja;0.0
 CC;1;1;José Cleber;0.0
 CC;1;1;Maria Alicia;0.0
 CC;1;1;Matheus Eugenio;0.0
+CP;1;1;Maria das Dores;10.0
+CP;1;1;João Cabeça de João;20.0
