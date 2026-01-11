@@ -22,6 +22,6 @@ public class ClientePessoaJuridica extends Cliente {
 
     @Override
     public String toString() {
-        return "Cliente Pessoa Juridica: \n"+ super.toString() +"\nCNPJ - " + cnpj + "\nNome da Empresa atrelada ao CNPJ - " + nome_Empresa;
+        return "Pessoa Juridica: \n"+ super.toString() +"\n | CNPJ: " + cnpj + " | Nome da Empresa atrelada ao CNPJ: " + nome_Empresa;
     }
 }

@@ -44,15 +44,7 @@ public abstract class Cliente {
 
     @Override
     public String toString() {
-        String enderecoImpressao;
-
-        if (!endereco.getComplemento().equalsIgnoreCase("Nenhum") ){
-            enderecoImpressao = endereco.toString() + "\nComplemento: "+endereco.getComplemento();}
-        else {enderecoImpressao = endereco.toString();}
-
-        return "Nome do cliente - " + nome +
-                "\nDataDeNascimento - " + dataDeNascimento.format(formatter) +
-                "\nEndereço - " + enderecoImpressao;
+        return this.nome;
     }
 
     public String toStringARQ() {

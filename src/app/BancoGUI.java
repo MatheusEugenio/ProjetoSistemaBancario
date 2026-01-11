@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
     public class BancoGUI extends JFrame {
@@ -26,7 +27,11 @@ import java.util.List;
 
         private JTextField txtNome, txtDoc, txtDataNasc, txtNomeEmpresa;
         private JTextField txtRua, txtCep, txtNum, txtBairro, txtCidade, txtComplemento;
-        private JComboBox<String> comboTipoCliente;
+        private JComboBox<String> comboTipoCliente, comboTipoTransacao;
+        private JComboBox<Cliente> comboClientesTransacao;
+        private JComboBox<Conta> comboContasOrigem;
+        private JTextField txtContaDestinoId, txtValorTransacao;
+        private JPasswordField txtSenhaTransacao;
 
         public BancoGUI() {
             // Inicialização do Banco (Carrega arquivos, faz a persistência funcionar)
@@ -42,7 +47,7 @@ import java.util.List;
             abas.addTab("Cadastrar Conta", criarPainelContas());
             abas.addTab("Transações", criarPainelDeTransacoes()); //falta implementação
             abas.addTab("Visão Geral", criarPainelListagem());
-            abas.addTab("Visão Geral das Transações", criarPainelTransacoes()); //falta implementação
+            abas.addTab("Visão Geral das Transações", criarPainelVisaoGeralTransacoes()); //falta implementação
 
             add(abas);
 
@@ -479,39 +484,229 @@ import java.util.List;
             return painel;
         }
 
-        private JPanel criarPainelTransacoes(){
+        private JPanel criarPainelVisaoGeralTransacoes(){
             JPanel painel = new JPanel(new BorderLayout());
 
             areaTransacoes = new JTextArea();
-            areaTransacoes.setEditable(false); // Apenas leitura
+            areaTransacoes.setEditable(false);
             areaTransacoes.setFont(new Font("Monospaced", Font.PLAIN, 12));
             areaTransacoes.setBackground(new Color(250, 250, 250)); // Um fundo levemente diferente (opcional)
 
-            // Adiciona a barra de rolagem
             painel.add(new JScrollPane(areaTransacoes), BorderLayout.CENTER);
 
-            // Botão de Atualizar
             JButton btnAtualizar = new JButton("Atualizar Histórico de Transações");
             btnAtualizar.setFont(new Font("SansSerif", Font.BOLD, 12));
-
             btnAtualizar.addActionListener(e -> carregarTransacoesDoArquivo());
-
             painel.add(btnAtualizar, BorderLayout.SOUTH);
-
-            // Carrega os dados assim que a aba é criada
             carregarTransacoesDoArquivo();
 
             return painel;
         }
 
-        private JPanel criarPainelDeTransacoes(){
-            JPanel painel = new JPanel(new GridLayout(12, 2, 10, 10));
+        private JPanel criarPainelDeTransacoes() {
+            JPanel painel = new JPanel(new GridBagLayout());
             painel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(8, 8, 8, 8);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+
+            // Título
+            JLabel lblTitulo = new JLabel("REALIZAR TRANSAÇÕES");
+            lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 16));
+            lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+            gbc.gridwidth = 2;
+            painel.add(lblTitulo, gbc);
+
+            // Reset
+            gbc.gridwidth = 1;
+            gbc.gridy++;
+
+            // 1. Selecionar Cliente (Quem vai fazer a operação)
+            painel.add(new JLabel("Cliente:"), gbc);
+
+            gbc.gridx = 1;
+            comboClientesTransacao = new JComboBox<>();
+            // preenche com os clientes atuais do banco
+            for (Cliente c : banco.getClientesDoBanco()) {
+                comboClientesTransacao.addItem(c);
+            }
+            painel.add(comboClientesTransacao, gbc);
+
+            //Selecionar Conta (Do cliente selecionado)
+            gbc.gridy++;
+            gbc.gridx = 0;
+            painel.add(new JLabel("Conta de Origem:"), gbc);
+
+            gbc.gridx = 1;
+            comboContasOrigem = new JComboBox<>();
+            painel.add(comboContasOrigem, gbc);
+
+            // Ação: Ao trocar de cliente, atualiza as contas dele na caixinha
+            comboClientesTransacao.addActionListener(e -> atualizarComboContasOrigem());
+            atualizarComboContasOrigem(); // Roda a primeira vez
+
+            //tipo da transação
+            gbc.gridy++;
+            gbc.gridx = 0;
+            painel.add(new JLabel("Tipo de Operação:"), gbc);
+
+            gbc.gridx = 1;
+            comboTipoTransacao = new JComboBox<>(new String[]{"Depósito", "Saque", "Transferência"});
+            painel.add(comboTipoTransacao, gbc);
+
+            //Valor
+            gbc.gridy++;
+            gbc.gridx = 0;
+            painel.add(new JLabel("Valor R$:"), gbc);
+
+            gbc.gridx = 1;
+            txtValorTransacao = new JTextField();
+            painel.add(txtValorTransacao, gbc);
+
+            // Conta Destino (Apenas para Transferência)
+            gbc.gridy++;
+            gbc.gridx = 0;
+            JLabel lblDestino = new JLabel("ID Conta Destino:");
+            painel.add(lblDestino, gbc);
+
+            gbc.gridx = 1;
+            txtContaDestinoId = new JTextField();
+            txtContaDestinoId.setEnabled(false);
+            painel.add(txtContaDestinoId, gbc);
+
+            // Ação: Habilitar campo de destino apenas se for Transferência
+            comboTipoTransacao.addActionListener(e -> {
+                String tipo = (String) comboTipoTransacao.getSelectedItem();
+                boolean isTransferencia = "Transferência".equals(tipo);
+                txtContaDestinoId.setEnabled(isTransferencia);
+                lblDestino.setEnabled(isTransferencia);
+            });
+
+            // BOTÃO CONFIRMAR
+            gbc.gridy++;
+            gbc.gridx = 0;
+            gbc.gridwidth = 2;
+            gbc.fill = GridBagConstraints.NONE;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.insets = new Insets(20, 0, 0, 0);
+
+            JButton btnExecutar = new JButton("Confirmar Transação");
+            btnExecutar.setPreferredSize(new Dimension(180, 40));
+            painel.add(btnExecutar, gbc);
+
+            // LÓGICA DO BOTÃO
+            btnExecutar.addActionListener(e -> executarTransacao());
+
+            // Botão para atualizar a lista de clientes (caso tenha cadastrado um novo recentemente)
+            JButton btnAtualizarListas = new JButton("Recarregar Clientes");
+            btnAtualizarListas.setFont(new Font("SansSerif", Font.PLAIN, 10));
+            btnAtualizarListas.addActionListener(ev -> {
+                comboClientesTransacao.removeAllItems();
+                for (Cliente c : banco.getClientesDoBanco()) {
+                    comboClientesTransacao.addItem(c);
+                }
+            });
+
+            // Adiciona um botão pequeno no topo ou rodapé para recarregar se necessário
+            gbc.gridy++;
+            painel.add(btnAtualizarListas, gbc);
 
             return painel;
         }
 
         // --- Métodos Auxiliares ---
+
+        private void atualizarComboContasOrigem() {
+            comboContasOrigem.removeAllItems();
+            Cliente clienteSelecionado = (Cliente) comboClientesTransacao.getSelectedItem();
+
+            if (clienteSelecionado != null) {
+                List<Conta> contas = clienteSelecionado.consultarContasVinculadas();
+                for (Conta c : contas) {
+                    comboContasOrigem.addItem(c);
+                }
+            }
+        }
+
+        private void executarTransacao() {
+            try {
+                Conta contaOrigem = (Conta) comboContasOrigem.getSelectedItem();
+                if (contaOrigem == null) throw new Exception("Selecione uma conta de origem.");
+
+                String tipo = (String) comboTipoTransacao.getSelectedItem();
+                double valor = Double.parseDouble(txtValorTransacao.getText().replace(",", "."));
+                String infoLog = "";
+
+                if (valor <= 0) throw new InvalidValueException("O valor deve ser positivo.");
+
+                if ("Depósito".equals(tipo)) {
+                    contaOrigem.depositar(valor);
+                    infoLog = "Destinatário: "+contaOrigem.getTitular().getNome()+" | Data: " + java.time.LocalDate.now() + " | Tipo: Depósito | Valor: " + valor;
+                    JOptionPane.showMessageDialog(this, "Depósito realizado com sucesso!");
+
+                } else if ("Saque".equals(tipo)) {
+                    contaOrigem.sacar(valor);
+                    infoLog = "Destinatário: "+contaOrigem.getTitular().getNome()+" | Data: " + java.time.LocalDate.now() + " | Tipo: Saque | Valor: " + valor;
+                    JOptionPane.showMessageDialog(this, "Saque realizado com sucesso!");
+
+                } else if ("Transferência".equals(tipo)) {
+                    // Busca conta destino
+                    int idDestino = Integer.parseInt(txtContaDestinoId.getText());
+                    Conta contaDestino = buscarContaPorNumero(idDestino); // Metodo auxiliar abaixo
+
+                    if (contaDestino == null) throw new Exception("Conta de destino não encontrada.");
+                    if (contaDestino == contaOrigem) throw new Exception("Não pode transferir para a mesma conta.");
+
+                    contaOrigem.transferir(contaDestino, valor);
+
+                    infoLog = "Remetente: "+contaOrigem.getTitular().getNome()+ " | Data: " + java.time.LocalDate.now() + " | Tipo: Transferência | Valor: " + valor + " | Destinatário: " + contaDestino.getTitular().getNome();
+                    JOptionPane.showMessageDialog(this, "Transferência realizada com sucesso!");
+                }
+
+                registrarTransacaoNoArquivo(infoLog);
+                txtValorTransacao.setText("");
+                txtContaDestinoId.setText("");
+                atualizarAreaLog();
+                carregarTransacoesDoArquivo(); // atualiza visão geral transações
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Valor ou ID da conta inválido.");
+            } catch (InvalidValueException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
+            }
+        }
+
+        // Precisamos varrer os clientes para achar a conta destino pelo ID/Número
+        private Conta buscarContaPorNumero(int numero) {
+            for (Cliente c : banco.getClientesDoBanco()) {
+                for (Conta conta : c.consultarContasVinculadas()) {
+                    if (conta.getNumero() == numero) {
+                        return conta;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private void registrarTransacaoNoArquivo(String linhaLog) {
+            try {
+                Path path = Paths.get("dados/RegistroDeTransacoes.txt");
+                if (!Files.exists(path)) {
+                    Files.createDirectories(path.getParent());
+                    Files.createFile(path);
+                }
+                // Adiciona quebra de linha
+                String linhaFinal = linhaLog + System.lineSeparator();
+                Files.write(path, linhaFinal.getBytes(), StandardOpenOption.APPEND);
+            } catch (IOException e) {
+                System.err.println("Erro ao salvar log: " + e.getMessage());
+            }
+        }
 
         private void carregarTransacoesDoArquivo() {
             areaTransacoes.setText("");

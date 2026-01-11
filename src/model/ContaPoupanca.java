@@ -39,9 +39,9 @@ public class ContaPoupanca extends Conta implements Tributavel {
     @Override
     public String toString() {
         return "Conta Poupanca: " +
-                "\nTitular - " + titular.getNome() +
-                "\nSaldo - " + saldo +
-                "\nAgência - " + agencia +
-                "\nNúmero da conta - " + numero;
+                " | Titular: " + titular.getNome() +
+                " | Saldo: " + this.getSaldo() +
+                " | Agência: " + agencia +
+                " | Número da conta: " + numero;
     }
 }

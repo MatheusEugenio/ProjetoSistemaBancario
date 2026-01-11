@@ -41,10 +41,10 @@ public class ContaCorrente extends Conta {
     @Override
     public String toString() {
         return "Conta Corrente: " +
-                "\nTitular - " + titular.getNome() +
-                "\nSaldo - " + saldo +
-                "\nAgência - " + agencia +
-                "\nNúmero da conta - " + numero;
+                " | Titular: " + titular.getNome() +
+                " | Saldo: " + this.getSaldo() +
+                " | Agência: " + agencia +
+                " | Número da conta: " + numero;
     }
 
     public void setLimiteChequeEspecial(Double limiteChequeEspecial) {

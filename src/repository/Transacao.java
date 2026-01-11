@@ -45,10 +45,6 @@ public class Transacao {
                 writer.newLine();
             }
 
-            // talvez tenha que refatorar essa parte por conta da formatação
-//            writer.write("Data da Transação: " + dataTransacao + " | Tipo de transacao: "+ tipoDeTransacao + //se foi saque ou deposito ou transferencia
-//                    " | Valor da transacao: "+ valTransacao );
-//            writer.newLine();
             writer.write("Destinatário: "+nome+" | Data da Transação: " + dataTransacao + " | Tipo de transacao: "+ tipoDeTransacao + //se foi saque ou deposito ou transferencia
                     " | Valor da transacao: "+ valTransacao );
             writer.newLine();

@@ -1,5 +1,6 @@
 package model;
 
+import exception.InvalidValueException;
 import repository.Transacao;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public abstract class Conta{
         }
     }
 
-    public boolean sacar(double val_saque) throws IOException {
+    public boolean sacar(double val_saque) throws IOException, InvalidValueException {
         if (val_saque > 0 && val_saque <= saldo && saldo >= 0) {
             saldo -= val_saque;
             Transacao transacao = new Transacao("Saque", val_saque);
@@ -64,12 +65,11 @@ public abstract class Conta{
             transacao.registrar(this.getTitular().nome);
             return true;
         } else {
-            System.out.println("Saldo insuficiente para efetuar o saque!");
-            return false;
+            throw new InvalidValueException("Saldo insuficiente para efetuar o saque!");
         }
     }
 
-    public boolean transferir(Conta conta, double valor_transferencia) throws IOException {
+    public boolean transferir(Conta conta, double valor_transferencia) throws IOException, InvalidValueException {
         if (valor_transferencia > 0 && this.getSaldo() >= valor_transferencia) {
 
             this.setSaldo(this.getSaldo() - valor_transferencia);
@@ -77,9 +77,6 @@ public abstract class Conta{
             Transacao transacaoDeSaida = new Transacao("Transferencia Enviada", valor_transferencia);
             this.historicoDeTransacoes.add(transacaoDeSaida);
             transacaoDeSaida.registrar(this.getTitular().getNome());
-            //algué tem que ser "this", pois o programa trabalha em terceira pessoa
-//          transacaoDeSaida.registrar();
-
             conta.setSaldo(conta.getSaldo() + valor_transferencia);
 
             Transacao transacaoRecebida = new Transacao("Transferencia Recebida", valor_transferencia);
@@ -88,8 +85,7 @@ public abstract class Conta{
 
             return true;
         }else {
-            System.out.println("FALHA NA TRANSFERÊNCIA, SALDO INSUFICENTE!");
-            return false;
+            throw new InvalidValueException("FALHA NA TRANSFERÊNCIA, SALDO INSUFICENTE!");
         }
     }
 
@@ -113,7 +109,7 @@ public abstract class Conta{
         return getNumero() +";"+ getAgencia() +";"+ getTitular().getNome() +";"+ getSaldo();
     }
 
-    public String getTipo(){return tipo;}
+    public String getTipo() {return tipo;}
     public double getSaldo(){return saldo;}
     public Integer getNumero() {return numero;}
     public Integer getAgencia() {return agencia;}
