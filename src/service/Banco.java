@@ -125,4 +125,5 @@ public class Banco {
     public List<Cliente> getClientesDoBanco() {
             return clientesDoBanco;
     }
+    public String getNomeDoBanco(){return nomeDoBanco;}
 }

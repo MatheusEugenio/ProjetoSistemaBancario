@@ -2,7 +2,6 @@ package app;
 
 import exception.InvalidValueException;
 import model.Cliente;
-import model.ClientePessoaFisica;
 import model.Conta;
 import model.Endereco;
 import service.Banco;
@@ -28,7 +27,7 @@ import java.util.List;
             // Inicialização do Banco (Carrega arquivos, faz a persistência funcionar)
             banco = new Banco("PACHECO's Bank");
 
-            setTitle("Sistema Bancário - Pacheco's Bank");
+            setTitle("Sistema Bancário - "+banco.getNomeDoBanco());
             setSize(800, 600);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
