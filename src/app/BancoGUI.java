@@ -4,7 +4,6 @@ import exception.InvalidValueException;
 import model.Cliente;
 import model.Conta;
 import model.Endereco;
-import repository.Transacao;
 import service.Banco;
 import util.Validacoes;
 
