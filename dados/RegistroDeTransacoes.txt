@@ -1,0 +1,5 @@
+--- EXTRATO BANCÁRIO ---
+Data da Transação: 2026-01-07 | Tipo de transacao: Deposito | Valor da transacao: 10.0
+Data da Transação: 2026-01-07 | Tipo de transacao: Deposito | Valor da transacao: 20.0
+Data da Transação: 2026-01-07 | Tipo de transacao: Deposito | Valor da transacao: 5.0
+Destinatário: José Cleber | Data da Transação: 2026-01-11 | Tipo de transacao: Deposito | Valor da transacao: 100.0

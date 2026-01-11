@@ -31,11 +31,11 @@ public class Transacao {
         dataTransacao.format(formatter);
     }
 
-    public void registrar() throws IOException {//falta a implementação das interfaces
-        registrarNoArquivo();
+    public void registrar(String nomeDestinatario) throws IOException {
+        registrarNoArquivo(nomeDestinatario);
     }
 
-    private void registrarNoArquivo() throws IOException {
+    private void registrarNoArquivo(String nome) throws IOException {
 
         boolean escreverCabecalho = !arquivoRegistrador.exists() || arquivoRegistrador.length() == 0;
 
@@ -46,9 +46,13 @@ public class Transacao {
             }
 
             // talvez tenha que refatorar essa parte por conta da formatação
-            writer.write("Data da Transação: " + dataTransacao + " | Tipo de transacao: "+ tipoDeTransacao + //se foi saque ou deposito ou transferencia
-                    " | Valor da transacao: "+ valTransacao);
+//            writer.write("Data da Transação: " + dataTransacao + " | Tipo de transacao: "+ tipoDeTransacao + //se foi saque ou deposito ou transferencia
+//                    " | Valor da transacao: "+ valTransacao );
+//            writer.newLine();
+            writer.write("Destinatário: "+nome+" | Data da Transação: " + dataTransacao + " | Tipo de transacao: "+ tipoDeTransacao + //se foi saque ou deposito ou transferencia
+                    " | Valor da transacao: "+ valTransacao );
             writer.newLine();
+
 
             writer.flush();
         }catch (IOException e) {

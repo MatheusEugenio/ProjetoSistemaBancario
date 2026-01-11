@@ -48,7 +48,7 @@ public abstract class Conta{
             saldo += val_deposito;
             Transacao transacao = new Transacao("Deposito", val_deposito);
             this.historicoDeTransacoes.add(transacao);
-            transacao.registrar();
+            transacao.registrar(this.getTitular().nome);
             return true;
         } else {
             System.out.println("O valor para depósito é inválido!");
@@ -61,7 +61,7 @@ public abstract class Conta{
             saldo -= val_saque;
             Transacao transacao = new Transacao("Saque", val_saque);
             historicoDeTransacoes.add(transacao);
-            transacao.registrar();
+            transacao.registrar(this.getTitular().nome);
             return true;
         } else {
             System.out.println("Saldo insuficiente para efetuar o saque!");
@@ -76,13 +76,15 @@ public abstract class Conta{
 
             Transacao transacaoDeSaida = new Transacao("Transferencia Enviada", valor_transferencia);
             this.historicoDeTransacoes.add(transacaoDeSaida);
-            transacaoDeSaida.registrar();
+            transacaoDeSaida.registrar(this.getTitular().getNome());
+            //algué tem que ser "this", pois o programa trabalha em terceira pessoa
+//          transacaoDeSaida.registrar();
 
             conta.setSaldo(conta.getSaldo() + valor_transferencia);
 
             Transacao transacaoRecebida = new Transacao("Transferencia Recebida", valor_transferencia);
             conta.historicoDeTransacoes.add(transacaoRecebida);
-            transacaoRecebida.registrar();
+            transacaoRecebida.registrar(conta.getTitular().getNome());
 
             return true;
         }else {

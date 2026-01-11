@@ -30,7 +30,7 @@ public class ContaCorrente extends Conta {
             saldo -= val_saque;
             Transacao transacao= new Transacao("Saque", val_saque);
             historicoDeTransacoes.add(transacao);
-            transacao.registrar();
+            transacao.registrar(this.getTitular().getNome());
             return true;
         } else {
             System.out.println("Saldo insuficiente para saque!");//revisar
