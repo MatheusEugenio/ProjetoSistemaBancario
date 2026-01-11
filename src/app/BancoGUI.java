@@ -30,7 +30,8 @@ import java.util.List;
         private JComboBox<String> comboTipoCliente, comboTipoTransacao;
         private JComboBox<Cliente> comboClientesTransacao;
         private JComboBox<Conta> comboContasOrigem;
-        private JTextField txtContaDestinoId, txtValorTransacao;
+        private JComboBox comboContaDestino;
+        private JTextField txtValorTransacao;
         private JPasswordField txtSenhaTransacao;
 
         public BancoGUI() {
@@ -569,19 +570,22 @@ import java.util.List;
             // Conta Destino (Apenas para Transferência)
             gbc.gridy++;
             gbc.gridx = 0;
-            JLabel lblDestino = new JLabel("ID Conta Destino:");
+            JLabel lblDestino = new JLabel("Conta de destino:");
             painel.add(lblDestino, gbc);
 
             gbc.gridx = 1;
-            txtContaDestinoId = new JTextField();
-            txtContaDestinoId.setEnabled(false);
-            painel.add(txtContaDestinoId, gbc);
+            comboContaDestino = new JComboBox();
+            comboContaDestino.setEnabled(false); // Começa desativado
+            painel.add(comboContaDestino, gbc);
 
-            // Ação: Habilitar campo de destino apenas se for Transferência
+            atualizarComboDestinos();
+
+            // Lógica visual: Habilitar apenas se for Transferência
             comboTipoTransacao.addActionListener(e -> {
                 String tipo = (String) comboTipoTransacao.getSelectedItem();
                 boolean isTransferencia = "Transferência".equals(tipo);
-                txtContaDestinoId.setEnabled(isTransferencia);
+
+                comboContaDestino.setEnabled(isTransferencia);
                 lblDestino.setEnabled(isTransferencia);
             });
 
@@ -600,7 +604,6 @@ import java.util.List;
             // LÓGICA DO BOTÃO
             btnExecutar.addActionListener(e -> executarTransacao());
 
-            // Botão para atualizar a lista de clientes (caso tenha cadastrado um novo recentemente)
             JButton btnAtualizarListas = new JButton("Recarregar Clientes");
             btnAtualizarListas.setFont(new Font("SansSerif", Font.PLAIN, 10));
             btnAtualizarListas.addActionListener(ev -> {
@@ -610,7 +613,7 @@ import java.util.List;
                 }
             });
 
-            // Adiciona um botão pequeno no topo ou rodapé para recarregar se necessário
+            //botão para recarregar
             gbc.gridy++;
             painel.add(btnAtualizarListas, gbc);
 
@@ -618,6 +621,16 @@ import java.util.List;
         }
 
         // --- Métodos Auxiliares ---
+        private void atualizarComboDestinos() {
+            comboContaDestino.removeAllItems();
+            // Varre todos os clientes
+            for (Cliente cliente : banco.getClientesDoBanco()) {
+                // Varre todas as contas desse cliente
+                for (Conta conta : cliente.consultarContasVinculadas()) {
+                    comboContaDestino.addItem(conta);
+                }
+            }
+        }
 
         private void atualizarComboContasOrigem() {
             comboContasOrigem.removeAllItems();
@@ -654,21 +667,18 @@ import java.util.List;
 
                 } else if ("Transferência".equals(tipo)) {
                     // Busca conta destino
-                    int idDestino = Integer.parseInt(txtContaDestinoId.getText());
-                    Conta contaDestino = buscarContaPorNumero(idDestino); // Metodo auxiliar abaixo
+                    Conta contaDestino = (Conta) comboContaDestino.getSelectedItem();
 
-                    if (contaDestino == null) throw new Exception("Conta de destino não encontrada.");
+                    if (contaDestino == null) throw new Exception("Selecione uma conta de destino.");
+
                     if (contaDestino == contaOrigem) throw new Exception("Não pode transferir para a mesma conta.");
 
                     contaOrigem.transferir(contaDestino, valor);
 
-                    infoLog = "Remetente: "+contaOrigem.getTitular().getNome()+ " | Data: " + java.time.LocalDate.now() + " | Tipo: Transferência | Valor: " + valor + " | Destinatário: " + contaDestino.getTitular().getNome();
                     JOptionPane.showMessageDialog(this, "Transferência realizada com sucesso!");
                 }
 
-                registrarTransacaoNoArquivo(infoLog);
                 txtValorTransacao.setText("");
-                txtContaDestinoId.setText("");
                 atualizarAreaLog();
                 carregarTransacoesDoArquivo(); // atualiza visão geral transações
 
