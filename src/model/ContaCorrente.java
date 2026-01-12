@@ -17,6 +17,7 @@ public class ContaCorrente extends Conta {
     public ContaCorrente(Cliente titular) {
         super(titular);
         this.tipo = "CC";
+        this.limiteChequeEspecial = 0.0;
     }
 
     @Override
