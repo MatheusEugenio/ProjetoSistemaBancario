@@ -110,11 +110,11 @@ public class PainelVisaoGeral extends JPanel implements Painel {
         for (Cliente c : clientes) {
             areaLog.append("Cliente: " + c.getNome() + "\n");
 
-            List<Conta> contas = c.consultarContasVinculadas();
-            if (contas.isEmpty()) {
+            List<Conta> contasVinculadas = c.consultarContasVinculadas();
+            if (contasVinculadas.isEmpty()) {
                 areaLog.append("   (Sem contas)\n");
             } else {
-                for (Conta conta : contas) {
+                for (Conta conta : contasVinculadas) {
                     areaLog.append("   -> Conta " + conta.getTipo() + " | Número da Conta: "+ conta.getNumero()+
                             " | Saldo: R$ " + String.format("%.2f", conta.getSaldo()) + "\n");
                 }

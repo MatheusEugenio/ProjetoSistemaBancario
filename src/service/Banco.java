@@ -102,9 +102,7 @@ public class Banco {
         if (contaParaRemover != null && donoDaConta != null) {
             donoDaConta.consultarContasVinculadas().remove(contaParaRemover);
 
-            if (this.contasDoBanco != null) {
-                this.contasDoBanco.remove(contaParaRemover);
-            }
+            if (this.contasDoBanco != null) {this.contasDoBanco.remove(contaParaRemover);}
 
             try {
                 salvarTodasAsContas();

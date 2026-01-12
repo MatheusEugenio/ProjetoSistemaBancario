@@ -3,7 +3,7 @@ package app;
 import model.Cliente;
 import model.Conta;
 import service.Banco;
-import view.*; // Certifique-se que seus painéis estão neste pacote
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,6 @@ public class BancoGUI extends JFrame {
     private Banco banco;
     private JTabbedPane abas;
 
-    // A ÚNICA variável de componente que sobrou (porque o método criarPainelContas ainda está aqui)
     private JComboBox<String> comboClientes;
 
     public BancoGUI() {
@@ -27,42 +26,36 @@ public class BancoGUI extends JFrame {
         // 2. Instanciando os Painéis
         PainelTransacoes pTransacoes = new PainelTransacoes(banco);
         PainelVisaoGeral pVisao = new PainelVisaoGeral(banco);
-        PainelHistoricoDeTransacoes pHistorico = new PainelHistoricoDeTransacoes(); // Confirme se o nome da classe é PainelHistorico ou PainelHistoricoDeTransacoes
+        PainelHistoricoDeTransacoes pHistorico = new PainelHistoricoDeTransacoes();
 
-        // 3. Painel Cadastro com Callback (Avisa os outros quando salvar)
         PainelCadastro pCadastro = new PainelCadastro(banco, () -> {
-            // AQUI ESTAVA O ERRO: Não chamamos mais métodos locais, chamamos os painéis!
-            atualizarListaClientesCombo(); // Atualiza a aba "Criar Conta" (local)
-            pVisao.recarregarDados();      // Atualiza Visão Geral
-            pTransacoes.recarregarDados(); // Atualiza Transações
+
+            atualizarListaClientesCombo();
+            pVisao.recarregarDados();
+            pTransacoes.recarregarDados();
         });
 
-        // 4. Montando as Abas
+        //Abas
         abas = new JTabbedPane();
         abas.addTab("Cadastro de Clientes", pCadastro);
-        abas.addTab("Cadastrar Conta", criarPainelContas()); // Este ainda é local
+        abas.addTab("Cadastrar Conta", criarPainelContas());
         abas.addTab("Transações", pTransacoes);
         abas.addTab("Visão Geral", pVisao);
         abas.addTab("Histórico", pHistorico);
 
         add(abas);
 
-        // 5. Listener para Auto-Refresh
         abas.addChangeListener(e -> {
             Component c = abas.getSelectedComponent();
-            // CORREÇÃO: O nome da interface é PainelAtualizavel
             if (c instanceof Painel) {
                 ((Painel) c).recarregarDados();
             }
         });
 
-        // Carga inicial
         atualizarListaClientesCombo();
     }
 
-    // --- MÉTODOS RESTANTES (Abertura de Conta) ---
-    // Mantivemos este localmente por enquanto
-
+    // MÉTODOS RESTANTES (Abertura de Conta)
     private void atualizarListaClientesCombo() {
         if (comboClientes != null) {
             comboClientes.removeAllItems();
@@ -130,7 +123,7 @@ public class BancoGUI extends JFrame {
         btnAbrir.setPreferredSize(new Dimension(200, 40));
         painel.add(btnAbrir, gbc);
 
-        // Área Resultado (Local apenas para feedback visual imediato)
+        // Área Resultado
         gbc.gridy++; gbc.fill = GridBagConstraints.HORIZONTAL;
         JTextArea areaResultado = new JTextArea(4, 20);
         areaResultado.setEditable(false);
@@ -159,17 +152,11 @@ public class BancoGUI extends JFrame {
 
                 if (alvo != null) {
                     Conta nova = banco.abrirConta(alvo, tipoFinal, valor);
-                    if (nova != null) { // Assumindo que abrirConta retorna a conta ou null
-                        // Define a senha na conta (se o método abrirConta já não definir)
-                        // nova.setSenha(senha);
+                    if (nova != null) {
 
                         areaResultado.setText("SUCESSO!\nConta: " + nova.getNumero() + "\nSaldo: " + valor);
                         txtSenha.setText("");
                         txtDeposito.setText("0.00");
-
-                        // IMPORTANTE: Avisar a aba de visão geral que tem conta nova!
-                        // Como pVisao não é acessível aqui dentro facilmente sem mudar o escopo,
-                        // o listener "abas.addChangeListener" cuidará disso quando o usuário trocar de aba.
                     }
                 } else {
                     JOptionPane.showMessageDialog(this, "Cliente não encontrado.");
