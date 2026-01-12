@@ -175,9 +175,10 @@ public class PainelCadastro extends JPanel {
             Validacoes.validacaoDasDatas(data);
 
             if (isPF) {
-                Validacoes.validacaoDasStrings(doc, 11);
+                Validacoes.validacaoDasStrings(doc, 11, "CPF");
             } else {
-                Validacoes.validacaoDasStrings(doc);
+                Validacoes.validacaoDasStrings(doc, 14, "CNPJ");
+
                 if (nomeDaEmpresa == null || nomeDaEmpresa.trim().isEmpty()) {
                     throw new InvalidValueException("ERRO: Nome da empresa obrigatório.");
                 }
@@ -191,7 +192,7 @@ public class PainelCadastro extends JPanel {
                 throw new InvalidValueException("ERRO: Todos os campos de endereço (exceto complemento) são obrigatórios.");
             }
 
-            Validacoes.validacaoDasStrings(cep, 8);
+            Validacoes.validacaoDasStrings(cep, 8, "CEP");
             if (complemento == null || complemento.trim().isEmpty()) complemento = "Nenhum";
 
             // 4. Cria o objeto Endereço (agora seguro)
