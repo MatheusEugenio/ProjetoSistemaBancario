@@ -59,21 +59,6 @@ public class Banco {
         return true;
     }
 
-    public boolean abrirConta(Cliente cliente, String tipoConta) throws IllegalArgumentException{
-        if (cliente == null){throw new IllegalArgumentException("Cliente não pode ser nulo.");}
-
-        Conta novaConta;
-
-        if (tipoConta.equalsIgnoreCase("CC")){ novaConta = new ContaCorrente(cliente);
-        } else if (tipoConta.equalsIgnoreCase("CP")) { novaConta = new ContaPoupanca(cliente);
-        }else {return false;}
-
-        cliente.vincularConta(novaConta);
-        this.contasDoBanco.add(novaConta);
-        this.bancoDeDados.salvarConta(contasDoBanco);
-        return true;
-    }
-
     public Conta abrirConta(Cliente cliente, String tipoConta, double depositoInicial) throws IllegalArgumentException, IOException {
         if (cliente == null){throw new IllegalArgumentException("Cliente não pode ser nulo.");}
 
@@ -133,7 +118,7 @@ public class Banco {
         return false; // Conta não encontrada
     }
 
-    private void salvarTodasAsContas() throws IOException {
+    private void salvarTodasAsContas() {
         // Cria uma lista temporária apenas com as contas que sobraram nos clientes
         List<Conta> listaAtualizada = new ArrayList<>();
 
