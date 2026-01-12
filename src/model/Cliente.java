@@ -21,8 +21,14 @@ public abstract class Cliente {
     }
 
     public void vincularConta(Conta conta) {
-        if (conta != null && conta.getTitular() != null){this.contas.add(conta);}
-        else{throw new RuntimeException("Vinculação de conta inválida!");}
+        if (conta != null && conta.getTitular() != null){
+
+            if (!this.contas.contains(conta)){
+                this.contas.add(conta);
+            }
+        } else{
+            throw new RuntimeException("Vinculação de conta inválida!");
+        }
     }
 
     // esse metodo deve ser revisado quando a Interface Gráfica for implementada
