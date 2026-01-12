@@ -36,9 +36,7 @@ public abstract class Conta{
         this.saldo = saldo;
         this.historicoDeTransacoes = new ArrayList<>();
 
-        if (numero >= contador){
-            contador = numero + 1;
-        }
+        if (numero >= contador){contador = numero + 1;}
     }
 
     public Conta(Cliente titular){

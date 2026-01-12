@@ -38,7 +38,6 @@ public class Validacoes {
         }
     }
 
-
     public static boolean validacaoDasStrings(String stringREF, int tamanhoIdeal) throws InvalidValueException {
         try {
             if (stringREF.length() != tamanhoIdeal || !stringREF.matches("[0-9]+")) {
