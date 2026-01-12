@@ -60,6 +60,7 @@ public class Banco {
     }
 
     public Conta abrirConta(Cliente cliente, String tipoConta, double depositoInicial) throws IllegalArgumentException, IOException {
+        
         if (cliente == null){throw new IllegalArgumentException("Cliente não pode ser nulo.");}
 
         Conta novaConta;
@@ -77,7 +78,6 @@ public class Banco {
         }
         novaConta.depositar(depositoInicial);
 
-        cliente.vincularConta(novaConta);
         this.contasDoBanco.add(novaConta);
         this.bancoDeDados.salvarConta(contasDoBanco);
 
