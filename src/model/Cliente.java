@@ -25,16 +25,6 @@ public abstract class Cliente {
         else{throw new RuntimeException("Vinculação de conta inválida!");}
     }
 
-    //esse metodo vai precisar de uma lógica de entrada e saída com interfaces
-    public boolean atualizarDados(String novo_nome, Endereco novo_endereco) {
-        if ((novo_nome.isBlank() || novo_nome == null) && novo_endereco == null){
-            return false;
-        }
-        this.nome = novo_nome;
-        this.endereco = novo_endereco;
-        return true;
-    }
-
     // esse metodo deve ser revisado quando a Interface Gráfica for implementada
     public ArrayList<Conta> consultarContasVinculadas() {return this.contas;}
     public String getNome() {return nome;}

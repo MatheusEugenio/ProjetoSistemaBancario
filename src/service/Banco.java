@@ -39,30 +39,6 @@ public class Banco {
         }
     }
 
-    public void mostrarClientesComContasVinculadas(){
-        System.out.println("\n--- Clientes cadastrados ---");
-        for (int i = 0; i < clientesDoBanco.size(); i++) {
-
-            System.out.print((i+1) + ". " + clientesDoBanco.get(i).getNome());
-
-            int quantContas = clientesDoBanco.get(i).consultarContasVinculadas().size();
-
-            if (quantContas > 0) { // printa o cliente que já possui conta, pelo menos uma conta vinculada
-                System.out.print(" - ");
-
-                for (int j = 0; j < quantContas; j++) {
-                    System.out.print(clientesDoBanco.get(i).consultarContasVinculadas().get(j).getTipo());
-
-                    if (j < quantContas - 1) {
-                        System.out.print(" & ");
-                    }
-                }
-            }
-
-            System.out.print("\n");
-        }
-    }
-
     //pessoa física
     public boolean adicionarCliente(String nome, String cpf, Endereco endereco, String dataNascimento) {
         if (nome == null || cpf == null || endereco == null || dataNascimento == null){return false;}
