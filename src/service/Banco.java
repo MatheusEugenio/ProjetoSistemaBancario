@@ -5,6 +5,7 @@ import repository.Persistencia;
 import util.Validacoes;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Banco {
@@ -120,6 +121,51 @@ public class Banco {
         this.bancoDeDados.salvarConta(contasDoBanco);
 
         return novaConta;
+    }
+
+    public boolean removerConta(int numeroConta) {
+        Conta contaParaRemover = null;
+        Cliente donoDaConta = null;
+
+        for (Cliente cliente : clientesDoBanco) {
+            for (Conta conta : cliente.consultarContasVinculadas()) {
+                if (conta.getNumero() == numeroConta) {
+                    contaParaRemover = conta;
+                    donoDaConta = cliente;
+                    break;
+                }
+            }
+            if (contaParaRemover != null) break;
+        }
+
+        if (contaParaRemover != null && donoDaConta != null) {
+            donoDaConta.consultarContasVinculadas().remove(contaParaRemover);
+
+            if (this.contasDoBanco != null) {
+                this.contasDoBanco.remove(contaParaRemover);
+            }
+
+            try {
+                salvarTodasAsContas();
+                return true;
+            } catch (Exception e) {
+                System.out.println("Erro ao persistir exclusão: " + e.getMessage());
+                return false;
+            }
+        }
+
+        return false; // Conta não encontrada
+    }
+
+    private void salvarTodasAsContas() throws IOException {
+        // Cria uma lista temporária apenas com as contas que sobraram nos clientes
+        List<Conta> listaAtualizada = new ArrayList<>();
+
+        for (Cliente c : clientesDoBanco) {
+            listaAtualizada.addAll(c.consultarContasVinculadas());
+        }
+
+        bancoDeDados.salvarConta(listaAtualizada);
     }
 
     public List<Cliente> getClientesDoBanco() {

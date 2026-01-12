@@ -1,9 +1,3 @@
-PF;Matheus Eugenio;12345678;Rua Epitacio Tralala;centro;1222;Quixadá;Nenhum;12/12/2002;12433917620
-PJ;Maria Alicia;12345678;Rua Estação;centro;110;Quixadá CE;ao lado do posto quinzinho;12/12/2006;12345678;Quixas Bahia
-PF;José Cleber;12345678;Rua Fernando Alencar;centro rural;12;Mombaça CE;Nenhum;10/10/2000;12344488838
-PJ;João Cabeça de João;12345678;Rua Princes Izabel;centro;111;Jacumã PB;Nenhum;12/12/2000;12345678;Quixaspee
-PF;Maria das Dores;12345678;rua Fabricio Bruno;centro;110;Quixelô;Nenhum;22/01/2004;12433817456
-PF;Marie Jane;12345678;Rua Epitacio;centro;11111;Quixadá Ce;Nenhum;12/10/2003;12345678910
-PF;Matheus Eugenio Granja;12345678;Beco do cacete;sítio;100;Mombança CE;Nenhum;10/11/2005;12344568792
-PJ;Maria das dores;12345678;Rua epitacio;centro;1111;Quixadá CE;Nenhum;22/04/2007;12345678;Quixas americanas
-
+PF;Jailson;12345678;Rua Fernando;centro;111;Quixadá;Nenhum;12/12/2000;12345678910
+PJ;Mayson Marques;12345678910;Rua Epitácio Neres;centro;111;Quixadá CE;nenhum;10/01/1999;123432432342;Pacheco's sunga
+PF;pacheco;12345678;Rua do alto;centro;111;Quixerabobim;apartamento;20/02/1970;12334455671
