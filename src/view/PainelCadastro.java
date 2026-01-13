@@ -6,21 +6,20 @@ import service.Banco;
 import util.Validacoes;
 
 import javax.swing.*;
-        import java.awt.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PainelCadastro extends JPanel {
 
-    // Dependências
     private Banco banco;
-    private Runnable acaoAposSalvar; // Um "gatilho" para avisar a tela principal
+    private Runnable acaoAposSalvar;
 
-    // Componentes Visuais (Atributos da classe para serem lidos no botão)
     private JComboBox<String> comboTipoCliente;
     private JTextField txtNome, txtDoc, txtDataNasc, txtNomeEmpresa;
     private JTextField txtRua, txtCep, txtNum, txtBairro, txtCidade, txtComplemento;
     private JLabel lblDoc, lblEmpresa;
 
-    // CONSTRUTOR
     public PainelCadastro(Banco banco, Runnable acaoAposSalvar) {
         this.banco = banco;
         this.acaoAposSalvar = acaoAposSalvar;
@@ -37,35 +36,28 @@ public class PainelCadastro extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // --- Título Dados Pessoais ---
-        gbc.gridx = 0; gbc.gridy = 0;
-        gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         gbc.insets = new Insets(0, 5, 10, 5);
         JLabel lblHeaderDados = new JLabel("DADOS PESSOAIS");
         lblHeaderDados.setFont(lblHeaderDados.getFont().deriveFont(Font.BOLD, 14f));
         lblHeaderDados.setHorizontalAlignment(SwingConstants.CENTER);
         add(lblHeaderDados, gbc);
 
-        // Reset config
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.gridwidth = 1; gbc.insets = new Insets(5, 5, 5, 5);
         gbc.gridy++;
 
-        // Tipo Cliente
         gbc.gridx = 0; gbc.weightx = 0.0;
         add(new JLabel("Tipo de Cliente:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         comboTipoCliente = new JComboBox<>(new String[]{"Pessoa Física", "Pessoa Jurídica"});
         add(comboTipoCliente, gbc);
 
-        // Nome
         gbc.gridy++; gbc.gridx = 0; gbc.weightx = 0.0;
         add(new JLabel("Nome do Cliente:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         txtNome = new JTextField();
         add(txtNome, gbc);
 
-        // Documento (CPF/CNPJ)
         gbc.gridy++; gbc.gridx = 0; gbc.weightx = 0.0;
         lblDoc = new JLabel("CPF:");
         add(lblDoc, gbc);
@@ -73,7 +65,6 @@ public class PainelCadastro extends JPanel {
         txtDoc = new JTextField();
         add(txtDoc, gbc);
 
-        // Nome Empresa (Opcional)
         gbc.gridy++; gbc.gridx = 0; gbc.weightx = 0.0;
         lblEmpresa = new JLabel("Nome da Empresa:");
         add(lblEmpresa, gbc);
@@ -81,18 +72,15 @@ public class PainelCadastro extends JPanel {
         txtNomeEmpresa = new JTextField();
         add(txtNomeEmpresa, gbc);
 
-        // Inicialmente invisíveis
         lblEmpresa.setVisible(false);
         txtNomeEmpresa.setVisible(false);
 
-        // Data Nascimento
         gbc.gridy++; gbc.gridx = 0; gbc.weightx = 0.0;
         add(new JLabel("Data de Nascimento (dd/MM/yyyy):"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         txtDataNasc = new JTextField();
         add(txtDataNasc, gbc);
 
-        // --- Título Endereço ---
         gbc.gridy++; gbc.gridx = 0; gbc.gridwidth = 2;
         gbc.insets = new Insets(20, 5, 5, 5);
         JLabel lblHeaderEndereco = new JLabel("ENDEREÇO");
@@ -100,11 +88,9 @@ public class PainelCadastro extends JPanel {
         lblHeaderEndereco.setHorizontalAlignment(SwingConstants.CENTER);
         add(lblHeaderEndereco, gbc);
 
-        // Reset config
         gbc.gridwidth = 1;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Campos de Endereço
         adicionarCampo(gbc, "Rua:", txtRua = new JTextField());
         adicionarCampo(gbc, "CEP:", txtCep = new JTextField());
         adicionarCampo(gbc, "Número:", txtNum = new JTextField());
@@ -112,10 +98,7 @@ public class PainelCadastro extends JPanel {
         adicionarCampo(gbc, "Cidade:", txtCidade = new JTextField());
         adicionarCampo(gbc, "Complemento:", txtComplemento = new JTextField());
 
-        // Botão Salvar
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
+        gbc.gridy++; gbc.gridx = 0; gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(20, 5, 5, 5);
@@ -123,39 +106,41 @@ public class PainelCadastro extends JPanel {
         JButton btnSalvar = new JButton("Salvar Cliente");
         btnSalvar.setPreferredSize(new Dimension(150, 30));
 
-        // Lógica do Botão
-        btnSalvar.addActionListener(e -> tentarSalvarCliente());
+        btnSalvar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tentarSalvarCliente();
+            }
+        });
 
         add(btnSalvar, gbc);
     }
 
-    // Metodo auxiliar para não repetir código de GridBag
     private void adicionarCampo(GridBagConstraints gbc, String rotulo, JTextField campo) {
         gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.weightx = 0.0;
+        gbc.gridx = 0; gbc.weightx = 0.0;
         add(new JLabel(rotulo), gbc);
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
+        gbc.gridx = 1; gbc.weightx = 1.0;
         add(campo, gbc);
     }
 
     private void configurarEventos() {
-        // Lógica visual: Troca labels CPF/CNPJ e esconde/mostra campo Empresa
-        comboTipoCliente.addActionListener(e -> {
-            String selecionado = (String) comboTipoCliente.getSelectedItem();
-            if ("Pessoa Física".equals(selecionado)) {
-                lblDoc.setText("CPF:");
-                lblEmpresa.setVisible(false);
-                txtNomeEmpresa.setVisible(false);
-            } else {
-                lblDoc.setText("CNPJ:");
-                lblEmpresa.setVisible(true);
-                txtNomeEmpresa.setVisible(true);
+        comboTipoCliente.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selecionado = (String) comboTipoCliente.getSelectedItem();
+                if ("Pessoa Física".equals(selecionado)) {
+                    lblDoc.setText("CPF:");
+                    lblEmpresa.setVisible(false);
+                    txtNomeEmpresa.setVisible(false);
+                } else {
+                    lblDoc.setText("CNPJ:");
+                    lblEmpresa.setVisible(true);
+                    txtNomeEmpresa.setVisible(true);
+                }
+                revalidate();
+                repaint();
             }
-            // Revalida o layout para ajustar os espaços
-            revalidate();
-            repaint();
         });
     }
 
@@ -170,7 +155,6 @@ public class PainelCadastro extends JPanel {
             boolean isPF = "Pessoa Física".equals(selecionado);
             String nomeDaEmpresa = txtNomeEmpresa.getText();
 
-            // Validações
             Validacoes.validacaoDasStrings(nome);
             Validacoes.validacaoDasDatas(data);
 
@@ -178,7 +162,6 @@ public class PainelCadastro extends JPanel {
                 Validacoes.validacaoDasStrings(doc, 11, "CPF");
             } else {
                 Validacoes.validacaoDasStrings(doc, 14, "CNPJ");
-
                 if (nomeDaEmpresa == null || nomeDaEmpresa.trim().isEmpty()) {
                     throw new InvalidValueException("ERRO: Nome da empresa obrigatório.");
                 }
@@ -188,21 +171,15 @@ public class PainelCadastro extends JPanel {
                     cep.trim().isEmpty() ||
                     txtBairro.getText().trim().isEmpty() ||
                     txtCidade.getText().trim().isEmpty()) {
-
-                throw new InvalidValueException("ERRO: Todos os campos de endereço (exceto complemento) são obrigatórios.");
+                throw new InvalidValueException("ERRO: Campos de endereço obrigatórios.");
             }
 
             Validacoes.validacaoDasStrings(cep, 8, "CEP");
             if (complemento == null || complemento.trim().isEmpty()) complemento = "Nenhum";
 
-            // 4. Cria o objeto Endereço (agora seguro)
             Endereco novoEndereco = new Endereco(
-                    txtRua.getText(),
-                    cep,
-                    Integer.parseInt(txtNum.getText()),
-                    complemento,
-                    txtBairro.getText(),
-                    txtCidade.getText()
+                    txtRua.getText(), cep, Integer.parseInt(txtNum.getText()),
+                    complemento, txtBairro.getText(), txtCidade.getText()
             );
 
             boolean sucesso;
@@ -222,28 +199,22 @@ public class PainelCadastro extends JPanel {
                 }
 
             } else {
-                JOptionPane.showMessageDialog(this, "Erro ao cadastrar. Verifique se o cliente já existe.");
+                JOptionPane.showMessageDialog(this, "Erro ao cadastrar.");
             }
 
         } catch (InvalidValueException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Erro: O Campo 'Número' deve ser numérico.");
+            JOptionPane.showMessageDialog(this, "Erro: Número inválido.");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage());
         }
     }
 
     private void limparCamposCadastro() {
-        txtNome.setText("");
-        txtDoc.setText("");
-        txtDataNasc.setText("");
-        txtNomeEmpresa.setText("");
-        txtRua.setText("");
-        txtCep.setText("");
-        txtNum.setText("");
-        txtBairro.setText("");
-        txtCidade.setText("");
+        txtNome.setText(""); txtDoc.setText(""); txtDataNasc.setText("");
+        txtNomeEmpresa.setText(""); txtRua.setText(""); txtCep.setText("");
+        txtNum.setText(""); txtBairro.setText(""); txtCidade.setText("");
         txtComplemento.setText("");
     }
 }

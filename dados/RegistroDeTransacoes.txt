@@ -1,9 +1,2 @@
 --- EXTRATO BANCÁRIO ---
-Destinatário: Jailson | Data da Transação: 2026-01-11 | Tipo de transacao: Deposito | Valor da transacao: 1000.0
-Destinatário: Jailson | Data da Transação: 2026-01-11 | Tipo de transacao: Saque | Valor da transacao: 999.0
-Destinatário: Mayson Marques | Data da Transação: 2026-01-12 | Tipo de transacao: Deposito | Valor da transacao: 1.0E9
-Destinatário: Mayson Marques | Data da Transação: 2026-01-12 | Tipo de transacao: Transferencia Enviada | Valor da transacao: 999.0
-Destinatário: Jailson | Data da Transação: 2026-01-12 | Tipo de transacao: Transferencia Recebida | Valor da transacao: 999.0
-Destinatário: pacheco | Data da Transação: 2026-01-12 | Tipo de transacao: Deposito | Valor da transacao: 0.5
-Destinatário: pacheco | Data da Transação: 2026-01-12 | Tipo de transacao: Transferencia Enviada | Valor da transacao: 0.25
-Destinatário: Jailson | Data da Transação: 2026-01-12 | Tipo de transacao: Transferencia Recebida | Valor da transacao: 0.25
+

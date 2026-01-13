@@ -6,6 +6,8 @@ import service.Banco;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class PainelVisaoGeral extends JPanel implements Painel {
@@ -23,35 +25,41 @@ public class PainelVisaoGeral extends JPanel implements Painel {
     }
 
     private void inicializarComponentes() {
-        // Área de Texto Central
         areaLog = new JTextArea();
         areaLog.setEditable(false);
         areaLog.setFont(new Font("Monospaced", Font.PLAIN, 12));
         add(new JScrollPane(areaLog), BorderLayout.CENTER);
 
-        // --- ÁREA SUL (Controles) ---
         JPanel painelControles = new JPanel();
         painelControles.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         painelControles.setBorder(BorderFactory.createTitledBorder("Gerenciamento"));
 
-        // Campo para informar qual conta excluir
         painelControles.add(new JLabel("Número da Conta para Excluir:"));
-        txtNumeroContaExcluir = new JTextField(6); // Tamanho visual do campo
+        txtNumeroContaExcluir = new JTextField(6);
         painelControles.add(txtNumeroContaExcluir);
 
-        // Botão Excluir
         JButton btnExcluir = new JButton("Excluir Conta");
-        btnExcluir.setBackground(new Color(255, 100, 100)); // Vermelho claro
+        btnExcluir.setBackground(new Color(255, 100, 100));
         btnExcluir.setForeground(Color.BLACK);
         btnExcluir.setFont(new Font("SansSerif", Font.BOLD, 12));
 
-        btnExcluir.addActionListener(e -> acaoExcluirConta());
+        btnExcluir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                acaoExcluirConta();
+            }
+        });
         painelControles.add(btnExcluir);
 
-        // Botão Atualizar (Mantido)
         JButton btnAtualizar = new JButton("Atualizar Lista");
         btnAtualizar.setFont(new Font("SansSerif", Font.BOLD, 12));
-        btnAtualizar.addActionListener(e -> recarregarDados());
+
+        btnAtualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                recarregarDados();
+            }
+        });
         painelControles.add(btnAtualizar);
 
         add(painelControles, BorderLayout.SOUTH);
@@ -67,8 +75,6 @@ public class PainelVisaoGeral extends JPanel implements Painel {
             }
 
             int numeroConta = Integer.parseInt(textoNumero);
-
-            // Confirmação de Segurança
             int confirmacao = JOptionPane.showConfirmDialog(this,
                     "Tem certeza que deseja excluir a conta Nº " + numeroConta + "?\nEssa ação não pode ser desfeita.",
                     "Confirmar Exclusão",
@@ -76,13 +82,12 @@ public class PainelVisaoGeral extends JPanel implements Painel {
                     JOptionPane.WARNING_MESSAGE);
 
             if (confirmacao == JOptionPane.YES_OPTION) {
-                // Chama o metodo no service (Banco) que remove e salva no arquivo
                 boolean sucesso = banco.removerConta(numeroConta);
 
                 if (sucesso) {
                     JOptionPane.showMessageDialog(this, "Conta removida com sucesso!");
                     txtNumeroContaExcluir.setText("");
-                    recarregarDados(); // Atualiza a tela automaticamente
+                    recarregarDados();
                 } else {
                     JOptionPane.showMessageDialog(this, "Conta não encontrada.");
                 }
@@ -97,7 +102,7 @@ public class PainelVisaoGeral extends JPanel implements Painel {
 
     @Override
     public void recarregarDados() {
-        areaLog.setText(""); // Limpa
+        areaLog.setText("");
         areaLog.append("--- CLIENTES E CONTAS ---\n\n");
 
         List<Cliente> clientes = banco.getClientesDoBanco();
@@ -109,7 +114,6 @@ public class PainelVisaoGeral extends JPanel implements Painel {
 
         for (Cliente c : clientes) {
             areaLog.append("Cliente: " + c.getNome() + "\n");
-
             List<Conta> contasVinculadas = c.consultarContasVinculadas();
             if (contasVinculadas.isEmpty()) {
                 areaLog.append("   (Sem contas)\n");

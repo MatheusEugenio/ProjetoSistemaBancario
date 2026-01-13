@@ -1,3 +1,1 @@
-PF;Jailson;12345678;Rua Fernando;centro;111;Quixadá;Nenhum;12/12/2000;12345678910
-PJ;Mayson Marques;12345678910;Rua Epitácio Neres;centro;111;Quixadá CE;nenhum;10/01/1999;123432432342;Pacheco's sunga
-PF;pacheco;12345678;Rua do alto;centro;111;Quixerabobim;apartamento;20/02/1970;12334455671
+

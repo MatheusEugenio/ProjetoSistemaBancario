@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,15 +13,11 @@ import java.util.List;
 public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
 
     private JTextArea areaTransacoes;
-    // Caminho do arquivo definido como constante para facilitar manutenção
     private static final String CAMINHO_ARQUIVO = "dados/RegistroDeTransacoes.txt";
 
     public PainelHistoricoDeTransacoes() {
         setLayout(new BorderLayout());
-
         inicializarComponentes();
-
-        // Carrega assim que abre
         recarregarDados();
     }
 
@@ -27,27 +25,31 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
         areaTransacoes = new JTextArea();
         areaTransacoes.setEditable(false);
         areaTransacoes.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        areaTransacoes.setBackground(new Color(250, 250, 250)); // Fundo leve
+        areaTransacoes.setBackground(new Color(250, 250, 250));
 
         add(new JScrollPane(areaTransacoes), BorderLayout.CENTER);
 
         JButton btnAtualizar = new JButton("Atualizar Histórico");
         btnAtualizar.setFont(new Font("SansSerif", Font.BOLD, 12));
-        btnAtualizar.addActionListener(e -> recarregarDados());
+
+        btnAtualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                recarregarDados();
+            }
+        });
 
         add(btnAtualizar, BorderLayout.SOUTH);
     }
 
     @Override
     public void recarregarDados() {
-        areaTransacoes.setText(""); // Limpa a tela
-
+        areaTransacoes.setText("");
         Path path = Paths.get(CAMINHO_ARQUIVO);
 
         try {
             if (!Files.exists(path)) {
                 areaTransacoes.append("Arquivo de registros não encontrado.\n");
-                areaTransacoes.append("Faça uma transação para criar o arquivo.");
                 return;
             }
 
@@ -59,13 +61,10 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
             }
 
             areaTransacoes.append("--- EXTRATO DE MOVIMENTAÇÕES ---\n\n");
-
             for (String linha : linhas) {
-                // Ignora linhas vazias ou separadores
                 if (linha.trim().isEmpty() || linha.startsWith("---")) {
                     continue;
                 }
-
                 formatarEImprimirLinha(linha);
             }
 
@@ -74,7 +73,6 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
         }
     }
 
-    // Método auxiliar para deixar o código mais limpo (parsing)
     private void formatarEImprimirLinha(String linha) {
         try {
             String[] partes = linha.split("\\|");
