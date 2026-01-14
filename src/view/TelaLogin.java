@@ -3,7 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class TelaLogin extends JFrame {
+public class TelaLogin extends JFrame implements PainelPrincipal{
     public TelaLogin() {
         setTitle("Login - PACHECO's Bank");
         setSize(400, 300);
@@ -64,7 +64,7 @@ public class TelaLogin extends JFrame {
             String senha = new String(txtSenha.getPassword());
 
             if (usuario.equals("admin") && senha.equals("1234")) {
-                abrirSistemaPrincipal();
+                conexaoComMenuPrincipal();
             } else {
                 JOptionPane.showMessageDialog(this,
                         "Usuário ou senha inválidos!",
@@ -76,11 +76,12 @@ public class TelaLogin extends JFrame {
         getRootPane().setDefaultButton(btnEntrar);
     }
 
-    private void abrirSistemaPrincipal() {
+    @Override
+    public void conexaoComMenuPrincipal() {
         this.dispose();
 
         SwingUtilities.invokeLater(() -> {
-            new BancoGUI().setVisible(true);
+            new MenuPrincipalGUI().setVisible(true);
         });
     }
 }
