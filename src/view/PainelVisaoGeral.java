@@ -48,7 +48,7 @@ public class PainelVisaoGeral extends JPanel implements Painel {
         btnExcluir.addActionListener(e -> acaoExcluirConta());
         painelControles.add(btnExcluir);
 
-        // Botão Atualizar (Mantido)
+        // Botão Atualizar
         JButton btnAtualizar = new JButton("Atualizar Lista");
         btnAtualizar.setFont(new Font("SansSerif", Font.BOLD, 12));
         btnAtualizar.addActionListener(e -> recarregarDados());

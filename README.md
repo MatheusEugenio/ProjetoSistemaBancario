@@ -7,7 +7,11 @@ Trabalho final da cadeira de POO do professor Ênio.
 
 Principais telas e funcionalidades:
 -
-> **Tela inicial**: é a tela de entrada do programa, a qual o Administrador/Usuário coloca seus dados: login e senha, para entrar e acessar o sistema por completo.
+> **Tela inicial**: é a tela de entrada do programa, a qual o Administrador/Usuário coloca seus dados: login e senha, para entrar e acessar o sistema por completo. 
+> 
+> ##### DADOS DE LOGIN PARA TESTE DO PROTÓTIPO:
+> **Usuário**: admin
+> | **Senha**: 1234
 
 > **Tela de Cadastro do Cliente**: é a tela principal do programa, a qual pode-se executar o cadastro dos clientes para prosseguir no sistema. 
 
@@ -23,6 +27,5 @@ Principais telas e funcionalidades:
 
 O que foi utilizado:
 -
-* Java puro
-* Java swing 
+* Java 21 
 * Git (para o versionamento) 
