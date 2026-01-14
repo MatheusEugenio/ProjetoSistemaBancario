@@ -11,7 +11,6 @@ import java.util.List;
 public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
 
     private JTextArea areaTransacoes;
-    // Caminho do arquivo definido como constante para facilitar manutenção
     private static final String CAMINHO_ARQUIVO = "dados/RegistroDeTransacoes.txt";
 
     public PainelHistoricoDeTransacoes() {
@@ -19,7 +18,6 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
 
         inicializarComponentes();
 
-        // Carrega assim que abre
         recarregarDados();
     }
 
@@ -40,7 +38,7 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
 
     @Override
     public void recarregarDados() {
-        areaTransacoes.setText(""); // Limpa a tela
+        areaTransacoes.setText("");
 
         Path path = Paths.get(CAMINHO_ARQUIVO);
 
@@ -61,7 +59,7 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
             areaTransacoes.append("--- EXTRATO DE MOVIMENTAÇÕES ---\n\n");
 
             for (String linha : linhas) {
-                // Ignora linhas vazias ou separadores
+
                 if (linha.trim().isEmpty() || linha.startsWith("---")) {
                     continue;
                 }
@@ -74,7 +72,6 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
         }
     }
 
-    // Método auxiliar para deixar o código mais limpo (parsing)
     private void formatarEImprimirLinha(String linha) {
         try {
             String[] partes = linha.split("\\|");

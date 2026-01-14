@@ -10,17 +10,14 @@ import javax.swing.*;
 
 public class PainelCadastro extends JPanel {
 
-    // Dependências
     private Banco banco;
-    private Runnable acaoAposSalvar; // Um "gatilho" para avisar a tela principal
+    private Runnable acaoAposSalvar;
 
-    // Componentes Visuais (Atributos da classe para serem lidos no botão)
     private JComboBox<String> comboTipoCliente;
     private JTextField txtNome, txtDoc, txtDataNasc, txtNomeEmpresa;
     private JTextField txtRua, txtCep, txtNum, txtBairro, txtCidade, txtComplemento;
     private JLabel lblDoc, lblEmpresa;
 
-    // CONSTRUTOR
     public PainelCadastro(Banco banco, Runnable acaoAposSalvar) {
         this.banco = banco;
         this.acaoAposSalvar = acaoAposSalvar;
@@ -37,7 +34,7 @@ public class PainelCadastro extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // --- Título Dados Pessoais ---
+        // Título Dados Pessoais
         gbc.gridx = 0; gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(0, 5, 10, 5);
@@ -81,7 +78,6 @@ public class PainelCadastro extends JPanel {
         txtNomeEmpresa = new JTextField();
         add(txtNomeEmpresa, gbc);
 
-        // Inicialmente invisíveis
         lblEmpresa.setVisible(false);
         txtNomeEmpresa.setVisible(false);
 
@@ -92,7 +88,6 @@ public class PainelCadastro extends JPanel {
         txtDataNasc = new JTextField();
         add(txtDataNasc, gbc);
 
-        // --- Título Endereço ---
         gbc.gridy++; gbc.gridx = 0; gbc.gridwidth = 2;
         gbc.insets = new Insets(20, 5, 5, 5);
         JLabel lblHeaderEndereco = new JLabel("ENDEREÇO");
@@ -100,11 +95,9 @@ public class PainelCadastro extends JPanel {
         lblHeaderEndereco.setHorizontalAlignment(SwingConstants.CENTER);
         add(lblHeaderEndereco, gbc);
 
-        // Reset config
         gbc.gridwidth = 1;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Campos de Endereço
         adicionarCampo(gbc, "Rua:", txtRua = new JTextField());
         adicionarCampo(gbc, "CEP:", txtCep = new JTextField());
         adicionarCampo(gbc, "Número:", txtNum = new JTextField());
@@ -123,13 +116,11 @@ public class PainelCadastro extends JPanel {
         JButton btnSalvar = new JButton("Salvar Cliente");
         btnSalvar.setPreferredSize(new Dimension(150, 30));
 
-        // Lógica do Botão
         btnSalvar.addActionListener(e -> tentarSalvarCliente());
 
         add(btnSalvar, gbc);
     }
 
-    // Metodo auxiliar para não repetir código de GridBag
     private void adicionarCampo(GridBagConstraints gbc, String rotulo, JTextField campo) {
         gbc.gridy++;
         gbc.gridx = 0;
@@ -141,7 +132,6 @@ public class PainelCadastro extends JPanel {
     }
 
     private void configurarEventos() {
-        // Lógica visual: Troca labels CPF/CNPJ e esconde/mostra campo Empresa
         comboTipoCliente.addActionListener(e -> {
             String selecionado = (String) comboTipoCliente.getSelectedItem();
             if ("Pessoa Física".equals(selecionado)) {
@@ -153,7 +143,7 @@ public class PainelCadastro extends JPanel {
                 lblEmpresa.setVisible(true);
                 txtNomeEmpresa.setVisible(true);
             }
-            // Revalida o layout para ajustar os espaços
+
             revalidate();
             repaint();
         });
@@ -195,7 +185,6 @@ public class PainelCadastro extends JPanel {
             Validacoes.validacaoDasStrings(cep, 8, "CEP");
             if (complemento == null || complemento.trim().isEmpty()) complemento = "Nenhum";
 
-            // 4. Cria o objeto Endereço (agora seguro)
             Endereco novoEndereco = new Endereco(
                     txtRua.getText(),
                     cep,
