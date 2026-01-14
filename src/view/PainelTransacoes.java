@@ -17,7 +17,6 @@ public class PainelTransacoes extends JPanel implements Painel{
     private JComboBox<Conta> comboContaDestino;
     private JButton btnExecutar;
     private JButton btnAtualizarListas;
-    private JPasswordField txtSenha;
 
     public PainelTransacoes(Banco banco) {
         this.banco = banco;
