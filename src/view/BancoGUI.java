@@ -1,10 +1,8 @@
-package app;
+package view;
 
 import model.Cliente;
 import model.Conta;
 import service.Banco;
-import view.*;
-
 import javax.swing.*;
 import java.awt.*;
 

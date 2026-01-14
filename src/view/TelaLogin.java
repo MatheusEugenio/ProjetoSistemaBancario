@@ -1,4 +1,4 @@
-package app;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,16 +81,6 @@ public class TelaLogin extends JFrame {
 
         SwingUtilities.invokeLater(() -> {
             new BancoGUI().setVisible(true);
-        });
-    }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ignored) {}
-
-        SwingUtilities.invokeLater(() -> {
-            new TelaLogin().setVisible(true);
         });
     }
 }
