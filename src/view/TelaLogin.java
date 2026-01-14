@@ -80,8 +80,6 @@ public class TelaLogin extends JFrame implements PainelPrincipal{
     public void conexaoComMenuPrincipal() {
         this.dispose();
 
-        SwingUtilities.invokeLater(() -> {
-            new MenuPrincipalGUI().setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new MenuPrincipalGUI().setVisible(true));
     }
 }
