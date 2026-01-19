@@ -1,85 +1,81 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class TelaLogin extends JFrame implements PainelPrincipal{
+public class TelaLogin extends JFrame {
+
     public TelaLogin() {
         setTitle("Login - PACHECO's Bank");
-        setSize(400, 300);
+        setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false);
+        JPanel painelFundo = new JPanel(new GridBagLayout());
+        painelFundo.setBackground(Estilo.COR_FUNDO_CLARO);
 
-        JPanel painelPrincipal = new JPanel(new GridBagLayout());
-        painelPrincipal.setBackground(new Color(245, 245, 250));
-        add(painelPrincipal);
+        setContentPane(painelFundo);
+        JPanel painelCard = new JPanel(new GridBagLayout());
+        painelCard.setBackground(Color.WHITE);
+        painelCard.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(220, 220, 220), 1, true),
+                new EmptyBorder(40, 50, 40, 50)
+        ));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 2;
-
-        JLabel lblTitulo = new JLabel("PACHECO's Bank");
-        lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 24));
-        lblTitulo.setForeground(new Color(0, 51, 102));
-        painelPrincipal.add(lblTitulo, gbc);
-
-        gbc.gridwidth = 1;
-        gbc.gridy++;
-        gbc.anchor = GridBagConstraints.EAST;
-        painelPrincipal.add(new JLabel("Usuário:"), gbc);
-
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        JTextField txtUsuario = new JTextField(15);
-        painelPrincipal.add(txtUsuario, gbc);
-
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.anchor = GridBagConstraints.EAST;
-        painelPrincipal.add(new JLabel("Senha:"), gbc);
-
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        JPasswordField txtSenha = new JPasswordField(15);
-        painelPrincipal.add(txtSenha, gbc);
-
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
+        gbc.insets = new Insets(5, 0, 5, 0);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(20, 10, 10, 10);
 
-        JButton btnEntrar = new JButton("ACESSAR SISTEMA");
-        btnEntrar.setFont(new Font("SansSerif", Font.BOLD, 12));
-        btnEntrar.setBackground(new Color(0, 102, 204));
-        btnEntrar.setForeground(Color.BLACK);
-        btnEntrar.setFocusPainted(false);
-        painelPrincipal.add(btnEntrar, gbc);
+        JLabel lblTitulo = new JLabel("Bem-vindo");
+        lblTitulo.setFont(Estilo.FONTE_TITULO);
+        lblTitulo.setForeground(Estilo.COR_PRINCIPAL);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        painelCard.add(lblTitulo, gbc);
 
-        btnEntrar.addActionListener(e -> {
-            String usuario = txtUsuario.getText();
-            String senha = new String(txtSenha.getPassword());
+        gbc.gridy++;
+        JLabel lblSub = new JLabel("PACHECO's Bank");
+        lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblSub.setForeground(Color.GRAY);
+        lblSub.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.insets = new Insets(0, 0, 25, 0);
+        painelCard.add(lblSub, gbc);
 
-            if (usuario.equals("admin") && senha.equals("1234")) {
-                conexaoComMenuPrincipal();
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "Usuário ou senha inválidos!",
-                        "Acesso Negado",
-                        JOptionPane.ERROR_MESSAGE);
+        gbc.gridy++;
+        gbc.insets = new Insets(5, 0, 5, 0);
+        JLabel lblUser = new JLabel("Usuário");
+        lblUser.setFont(Estilo.FONTE_BOTAO);
+        painelCard.add(lblUser, gbc);
+        gbc.gridy++;
+        JTextField txtUsuario = Estilo.criarInput();
+        txtUsuario.setPreferredSize(new Dimension(280, 40));
+        painelCard.add(txtUsuario, gbc);
+        gbc.gridy++;
+        JLabel lblPass = new JLabel("Senha");
+        lblPass.setFont(Estilo.FONTE_BOTAO);
+        painelCard.add(lblPass, gbc);
+        gbc.gridy++;
+        JPasswordField txtSenha = new JPasswordField();
+        txtSenha.setFont(Estilo.FONTE_GERAL);
+        txtSenha.setBorder(txtUsuario.getBorder());
+        txtSenha.setPreferredSize(new Dimension(280, 40));
+        painelCard.add(txtSenha, gbc);
+        gbc.gridy++;
+        gbc.insets = new Insets(25, 0, 0, 0);
+        JButton btnEntrar = Estilo.criarBotao("ACESSAR SISTEMA");
+        btnEntrar.setPreferredSize(new Dimension(280, 45));
+        painelCard.add(btnEntrar, gbc);
+        painelFundo.add(painelCard);
+        btnEntrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new BancoGUI().setVisible(true);
+                dispose();
             }
         });
-
-        getRootPane().setDefaultButton(btnEntrar);
-    }
-
-    @Override
-    public void conexaoComMenuPrincipal() {
-        this.dispose();
-
-        SwingUtilities.invokeLater(() -> new MenuPrincipalGUI().setVisible(true));
     }
 }

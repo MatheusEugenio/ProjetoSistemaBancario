@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,9 +17,7 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
 
     public PainelHistoricoDeTransacoes() {
         setLayout(new BorderLayout());
-
         inicializarComponentes();
-
         recarregarDados();
     }
 
@@ -25,13 +25,19 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
         areaTransacoes = new JTextArea();
         areaTransacoes.setEditable(false);
         areaTransacoes.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        areaTransacoes.setBackground(new Color(250, 250, 250)); // Fundo leve
+        areaTransacoes.setBackground(new Color(250, 250, 250));
 
         add(new JScrollPane(areaTransacoes), BorderLayout.CENTER);
 
         JButton btnAtualizar = new JButton("Atualizar Histórico");
         btnAtualizar.setFont(new Font("SansSerif", Font.BOLD, 12));
-        btnAtualizar.addActionListener(e -> recarregarDados());
+
+        btnAtualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                recarregarDados();
+            }
+        });
 
         add(btnAtualizar, BorderLayout.SOUTH);
     }
@@ -39,13 +45,11 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
     @Override
     public void recarregarDados() {
         areaTransacoes.setText("");
-
         Path path = Paths.get(CAMINHO_ARQUIVO);
 
         try {
             if (!Files.exists(path)) {
                 areaTransacoes.append("Arquivo de registros não encontrado.\n");
-                areaTransacoes.append("Faça uma transação para criar o arquivo.");
                 return;
             }
 
@@ -57,13 +61,10 @@ public class PainelHistoricoDeTransacoes extends JPanel implements Painel {
             }
 
             areaTransacoes.append("--- EXTRATO DE MOVIMENTAÇÕES ---\n\n");
-
             for (String linha : linhas) {
-
                 if (linha.trim().isEmpty() || linha.startsWith("---")) {
                     continue;
                 }
-
                 formatarEImprimirLinha(linha);
             }
 
