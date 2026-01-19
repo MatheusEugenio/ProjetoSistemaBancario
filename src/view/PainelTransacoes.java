@@ -83,8 +83,9 @@ public class PainelTransacoes extends JPanel implements Painel {
         btnExecutar = new JButton("Confirmar Transação");
         btnExecutar.setPreferredSize(new Dimension(180, 40));
         add(btnExecutar, gbc);
-
-        gbc.gridy++; gbc.insets = new Insets(10, 0, 0, 0);
+      
+        gbc.gridy++;
+        gbc.insets = new Insets(10, 0, 0, 0);
         btnAtualizarListas = new JButton("Recarregar Clientes Manualmente");
         btnAtualizarListas.setFont(new Font("SansSerif", Font.PLAIN, 10));
         add(btnAtualizarListas, gbc);
