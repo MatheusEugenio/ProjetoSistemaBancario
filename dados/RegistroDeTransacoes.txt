@@ -1,2 +1,3 @@
 --- EXTRATO BANCÁRIO ---
 
+Destinatário: alan | Data da Transação: 2026-01-13 | Tipo de transacao: Deposito | Valor da transacao: 100.0
