@@ -11,3 +11,4 @@ Destinatário: pacheco | Data da Transação: 2026-01-12 | Tipo de transacao: Tr
 Destinatário: Jailson | Data da Transação: 2026-01-12 | Tipo de transacao: Transferencia Recebida | Valor da transacao: 0.25
 Destinatário: Mayson Marques | Data da Transação: 2026-01-13 | Tipo de transacao: Deposito | Valor da transacao: 100.0
 Destinatário: Jailson | Data da Transação: 2026-01-13 | Tipo de transacao: Deposito | Valor da transacao: 20.0
+Destinatário: enyo | Data da Transação: 2026-01-19 | Tipo de transacao: Deposito | Valor da transacao: 10.0
