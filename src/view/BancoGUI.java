@@ -87,8 +87,7 @@ public class BancoGUI extends JFrame {
         btnSair.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new TelaLogin().setVisible(true);
-                dispose();
+               System.exit(0);
             }
         });
         menuLateral.add(btnSair);
